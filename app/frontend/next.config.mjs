@@ -71,7 +71,8 @@ const nextConfig = {
           {
             key: 'Permissions-Policy',
             value: [
-              'camera=()',
+              // Allow same-origin camera for /scan capture="environment" on phones
+              'camera=(self)',
               'microphone=()',
               'geolocation=()',
               'interest-cohort=()',

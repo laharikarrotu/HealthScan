@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import "./globals.css";
 import Nav from "./components/Nav";
@@ -11,6 +11,13 @@ export const metadata: Metadata = {
   description: "Scan medical forms, prescriptions, and healthcare documents. Get instant help with healthcare paperwork.",
 };
 
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  viewportFit: "cover",
+  themeColor: "#f8fafc",
+};
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -19,7 +26,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="h-full w-full">
       <body
-        className="antialiased h-full w-full flex flex-col bg-slate-50"
+        className="antialiased h-full w-full flex flex-col bg-slate-50 pb-[env(safe-area-inset-bottom)]"
       >
         <ErrorBoundary>
         <HealthScanProvider>
