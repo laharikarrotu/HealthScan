@@ -65,6 +65,7 @@ uploads/
 *.gif
 !public/**/*.png
 !public/**/*.jpg
+!app/frontend/public/healthscan-hero.png
 
 # Coverage
 .coverage

@@ -8,28 +8,26 @@ interface MedicalDisclaimerProps {
 export default function MedicalDisclaimer({ variant = 'default', className = '' }: MedicalDisclaimerProps) {
   if (variant === 'footer') {
     return (
-      <footer className={`medical-card border-t-2 border-blue-200 mt-12 p-6 ${className}`}>
-        <div className="w-full mx-auto px-6 md:px-10">
-          <div className="flex items-start gap-4">
-            <div className="flex-shrink-0">
-              <span className="text-2xl">⚠️</span>
-            </div>
-            <div className="flex-1">
-              <h3 className="font-bold text-slate-800 mb-2">Important Medical Disclaimer</h3>
-              <p className="text-sm text-slate-700 mb-3 leading-relaxed">
-                HealthScan is an AI-powered healthcare assistant designed to provide informational support only. 
-                <strong className="text-slate-900"> This tool is NOT a replacement for professional medical advice, diagnosis, or treatment.</strong> 
-                Always seek the advice of your physician or other qualified health provider with any questions you may have regarding a medical condition.
-              </p>
-              <div className="grid md:grid-cols-2 gap-4 mt-4">
-                <div>
-                  <p className="text-xs font-semibold text-slate-600 mb-1">For Medical Emergencies:</p>
-                  <p className="text-xs text-slate-600">Call 911 or your local emergency number immediately</p>
-                </div>
-                <div>
-                  <p className="text-xs font-semibold text-slate-600 mb-1">Privacy & Security:</p>
-                  <p className="text-xs text-slate-600">Your health information is encrypted and secure</p>
-                </div>
+      <footer className={`hs-card border-t border-slate-200 mt-10 pt-6 px-4 sm:px-5 pb-6 ${className}`}>
+        <div className="flex items-start gap-3">
+          <span className="text-sm font-bold text-amber-900 shrink-0 mt-0.5" aria-hidden>
+            !
+          </span>
+          <div className="flex-1 min-w-0">
+            <h3 className="font-semibold text-slate-900 mb-2 text-sm sm:text-base">Medical disclaimer</h3>
+            <p className="text-sm text-slate-700 mb-3 leading-relaxed">
+              HealthScan is for informational support only.{' '}
+              <strong className="text-slate-900">It is not a substitute for professional medical advice, diagnosis, or treatment.</strong>{' '}
+              Always follow your physician or qualified health provider for medical decisions.
+            </p>
+            <div className="grid sm:grid-cols-2 gap-4 mt-4">
+              <div>
+                <p className="text-xs font-semibold text-slate-800 mb-1">Emergencies</p>
+                <p className="text-xs text-slate-700">Call 911 or your local emergency number.</p>
+              </div>
+              <div>
+                <p className="text-xs font-semibold text-slate-800 mb-1">Privacy</p>
+                <p className="text-xs text-slate-700">Do not share sensitive data you are not comfortable storing.</p>
               </div>
             </div>
           </div>
@@ -40,30 +38,31 @@ export default function MedicalDisclaimer({ variant = 'default', className = '' 
 
   if (variant === 'compact') {
     return (
-      <div className={`medical-card bg-amber-50 border-2 border-amber-200 rounded-xl p-3 ${className}`}>
-        <div className="flex items-start gap-2">
-          <span className="text-lg">⚠️</span>
-          <p className="text-xs text-amber-800 leading-relaxed">
-            <strong>Not a replacement for professional medical advice.</strong> Always consult your healthcare provider.
-          </p>
-        </div>
+      <div
+        className={`rounded-xl border border-amber-300/90 bg-amber-50 px-3 py-2.5 ${className}`}
+        role="note"
+      >
+        <p className="text-xs text-amber-950 leading-relaxed">
+          <strong className="font-semibold">Not medical advice.</strong> Always consult your healthcare provider.
+        </p>
       </div>
     );
   }
 
   return (
-    <div className={`medical-card bg-amber-50 border-2 border-amber-200 rounded-xl p-4 ${className}`}>
+    <div className={`rounded-xl border border-amber-300/90 bg-amber-50 p-4 ${className}`} role="note">
       <div className="flex items-start gap-3">
-        <span className="text-xl">⚠️</span>
+        <span className="text-sm font-bold text-amber-900 shrink-0" aria-hidden>
+          !
+        </span>
         <div>
-          <p className="text-sm font-semibold text-amber-800 mb-1">Important Medical Disclaimer</p>
-          <p className="text-xs text-amber-700 leading-relaxed">
-            This tool is for informational purposes only and is not a replacement for professional medical advice, 
-            diagnosis, or treatment. Always consult your healthcare provider before making any medical decisions.
+          <p className="text-sm font-semibold text-amber-950 mb-1">Medical disclaimer</p>
+          <p className="text-xs text-amber-950/95 leading-relaxed">
+            For information only—not a replacement for professional advice, diagnosis, or treatment. Consult your
+            healthcare provider before changing medications or diet.
           </p>
         </div>
       </div>
     </div>
   );
 }
-

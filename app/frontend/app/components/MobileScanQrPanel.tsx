@@ -60,7 +60,7 @@ export default function MobileScanQrPanel() {
 
   return (
     <div className="mt-4 pt-4 border-t border-slate-200/90">
-      <p className="text-xs font-medium text-slate-600 mb-3">Continue on your phone</p>
+      <p className="text-xs font-semibold text-slate-800 mb-3">Continue on your phone</p>
       <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4">
         <div className="shrink-0 rounded-xl bg-white p-3 border border-slate-200 shadow-sm self-center sm:self-start">
           {target ? (
@@ -75,12 +75,12 @@ export default function MobileScanQrPanel() {
           )}
         </div>
         <div className="flex-1 min-w-0 space-y-2">
-          <p className="text-xs text-slate-600 leading-relaxed">
+          <p className="text-xs text-slate-800 leading-relaxed">
             Scan with your phone camera to open HealthScan scan. Then use <span className="font-medium">Use camera</span> on that page to photograph the document.
           </p>
           {target && (
             <div className="flex flex-wrap items-center gap-2">
-              <code className="text-[11px] text-slate-500 truncate max-w-full sm:max-w-[240px] block bg-slate-100 px-2 py-1 rounded border border-slate-200/80">
+              <code className="text-[11px] text-slate-800 truncate max-w-full sm:max-w-[240px] block bg-slate-100 px-2 py-1 rounded border border-slate-200">
                 {target}
               </code>
               <button

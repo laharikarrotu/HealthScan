@@ -297,12 +297,12 @@ export default function ScanPage() {
           onCancel={handleVerificationCancel}
         />
       )}
-      <div className="h-full w-full text-slate-800 overflow-y-auto bg-slate-50">
-        <div className="max-w-3xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
+      <div className="hs-page">
+        <div className="hs-inner">
           <header className="mb-8">
-            <p className="text-xs font-medium text-slate-500 uppercase tracking-wide mb-1">Scan</p>
-            <h1 className="text-2xl sm:text-3xl font-semibold text-slate-900 tracking-tight">Prescriptions &amp; documents</h1>
-            <p className="text-sm text-slate-600 mt-2 max-w-xl leading-relaxed">
+            <p className="hs-eyebrow">Scan</p>
+            <h1 className="hs-title">Prescriptions &amp; documents</h1>
+            <p className="hs-lede">
               Upload an image. Leave the goal empty for fast prescription extraction, or describe what you need for forms and automation.
             </p>
           </header>
@@ -312,7 +312,7 @@ export default function ScanPage() {
 
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* Image Upload Section */}
-          <div className="medical-card panel-static p-4 sm:p-5 rounded-xl">
+          <div className="hs-card panel-static p-4 sm:p-5">
             <h2 className="text-sm font-semibold text-slate-900 mb-3">1. Image</h2>
             
             {imagePreview ? (
@@ -367,7 +367,7 @@ export default function ScanPage() {
           </div>
 
           {/* Intent Input */}
-          <div className="medical-card panel-static p-4 sm:p-5 rounded-xl">
+          <div className="hs-card panel-static p-4 sm:p-5">
             <h2 className="text-sm font-semibold text-slate-900 mb-3">2. Goal (optional)</h2>
             <textarea
               value={intent}
@@ -383,7 +383,7 @@ export default function ScanPage() {
 
           {/* Progress Indicator */}
           {loading && (
-            <div className="medical-card panel-static p-4 sm:p-5 rounded-xl">
+            <div className="hs-card panel-static p-4 sm:p-5">
               <ProgressIndicator 
                 steps={['Analyzing Image', 'Planning Actions', 'Executing', 'Complete']}
                 currentStep={progressStep}
@@ -430,7 +430,7 @@ export default function ScanPage() {
 
         {/* Results */}
         {result && (
-          <div className="mt-8 medical-card p-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
+          <div className="mt-8 hs-card panel-static p-5 sm:p-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-xl font-semibold text-slate-800">Results</h2>
               <div className={`px-3 py-1 rounded-full text-sm font-medium ${

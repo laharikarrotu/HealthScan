@@ -434,14 +434,21 @@ Upload a prescription photo or ask a question. Use the shortcuts below to open d
   };
 
   return (
-    <div className="flex flex-col h-full w-full bg-slate-50" role="main" aria-label="HealthScan Chat Assistant">
+    <div className="flex flex-col h-full w-full text-slate-900" role="main" aria-label="HealthScan Chat Assistant">
       {/* Main Content Container - Properly Contained */}
-      <div className="flex-1 overflow-y-auto min-h-0">
-        <div className="max-w-2xl mx-auto px-4 sm:px-6 py-5 sm:py-8">
+      <div className="hs-page flex-1 min-h-0">
+        <div className="hs-inner">
+          <header className="mb-6 sm:mb-8 pb-5 border-b border-slate-200">
+            <p className="hs-eyebrow">Home</p>
+            <h1 className="hs-title">Assistant</h1>
+            <p className="hs-lede">
+              Upload prescription photos or type a question. Layout matches the rest of HealthScan on phones, tablets, and desktops.
+            </p>
+          </header>
           {/* Quick Actions Grid - Contained in Card */}
           {messages.length === 1 && messages[0].role === 'assistant' && !loading && (
-            <div className="bg-white rounded-xl border border-slate-200/90 shadow-sm p-5 mb-6">
-              <h2 className="text-sm font-semibold text-slate-500 uppercase tracking-wide mb-3">Shortcuts</h2>
+            <div className="hs-card panel-static p-5 mb-6">
+              <h2 className="text-sm font-semibold text-slate-600 uppercase tracking-wide mb-3">Shortcuts</h2>
               <div className="grid grid-cols-2 gap-3">
                 <button
                   type="button"
@@ -450,7 +457,7 @@ Upload a prescription photo or ask a question. Use the shortcuts below to open d
                 >
                   <IconUpload className="w-5 h-5 text-slate-600 mb-2" />
                   <h3 className="text-sm font-semibold text-slate-900">Upload here</h3>
-                  <p className="text-xs text-slate-500 mt-0.5 leading-snug">Add images to this chat</p>
+                  <p className="text-xs text-slate-600 mt-0.5 leading-snug">Add images to this chat</p>
                 </button>
                 <button
                   type="button"
@@ -459,7 +466,7 @@ Upload a prescription photo or ask a question. Use the shortcuts below to open d
                 >
                   <IconScan className="w-5 h-5 text-slate-600 mb-2" />
                   <h3 className="text-sm font-semibold text-slate-900">Scan workflow</h3>
-                  <p className="text-xs text-slate-500 mt-0.5 leading-snug">Guided extraction &amp; forms</p>
+                  <p className="text-xs text-slate-600 mt-0.5 leading-snug">Guided extraction &amp; forms</p>
                 </button>
                 <button
                   type="button"
@@ -468,7 +475,7 @@ Upload a prescription photo or ask a question. Use the shortcuts below to open d
                 >
                   <IconPill className="w-5 h-5 text-slate-600 mb-2" />
                   <h3 className="text-sm font-semibold text-slate-900">Interactions</h3>
-                  <p className="text-xs text-slate-500 mt-0.5 leading-snug">Multiple prescriptions</p>
+                  <p className="text-xs text-slate-600 mt-0.5 leading-snug">Multiple prescriptions</p>
                 </button>
                 <button
                   type="button"
@@ -477,7 +484,7 @@ Upload a prescription photo or ask a question. Use the shortcuts below to open d
                 >
                   <IconWellness className="w-5 h-5 text-slate-600 mb-2" />
                   <h3 className="text-sm font-semibold text-slate-900">Diet</h3>
-                  <p className="text-xs text-slate-500 mt-0.5 leading-snug">Condition-aware tips</p>
+                  <p className="text-xs text-slate-600 mt-0.5 leading-snug">Condition-aware tips</p>
                 </button>
               </div>
             </div>
@@ -510,7 +517,7 @@ Upload a prescription photo or ask a question. Use the shortcuts below to open d
                   <div className="whitespace-pre-wrap leading-relaxed text-sm [&_strong]:font-semibold">
                     {msg.content}
                   </div>
-                  <div className={`text-[11px] mt-2 tabular-nums ${msg.role === 'user' ? 'text-slate-300' : 'text-slate-400'}`}>
+                  <div className={`text-[11px] mt-2 tabular-nums ${msg.role === 'user' ? 'text-slate-300' : 'text-slate-600'}`}>
                     {msg.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                   </div>
                 </div>
@@ -522,7 +529,7 @@ Upload a prescription photo or ask a question. Use the shortcuts below to open d
 
           {/* Status Messages - Contained, Not Overlaying */}
           {streamingProgress && (
-            <div className="mt-4 bg-blue-50 border border-blue-200 rounded-lg p-4">
+            <div className="mt-4 rounded-xl border border-slate-200 bg-slate-100/80 p-4">
               <StreamingProgress 
                 step={streamingProgress.step}
                 progress={streamingProgress.progress}
@@ -532,25 +539,26 @@ Upload a prescription photo or ask a question. Use the shortcuts below to open d
           )}
           
           {loading && !streamingProgress && (
-            <div className="mt-4 bg-blue-50 border border-blue-200 rounded-lg p-4 flex items-center gap-3">
-              <div className="spinner w-5 h-5 border-2 border-blue-500 border-t-transparent"></div>
-              <span className="text-sm text-slate-700">Analyzing your prescription...</span>
+            <div className="mt-4 rounded-xl border border-slate-200 bg-slate-100/80 p-4 flex items-center gap-3">
+              <div className="spinner w-5 h-5 border-2 border-slate-700 border-t-transparent"></div>
+              <span className="text-sm text-slate-900 font-medium">Analyzing your prescription…</span>
             </div>
           )}
           
           {errorState && (
-            <div className="mt-4 bg-red-50 border border-red-200 rounded-lg p-4">
+            <div className="mt-4 rounded-xl border border-red-200 bg-red-50/90 p-4">
               <div className="flex items-start gap-3">
-                <span className="text-xl">⚠️</span>
-                <div className="flex-1">
-                  <p className="text-sm font-semibold text-red-800 mb-1">Error</p>
-                  <p className="text-sm text-red-700 mb-3">{errorState}</p>
+                <span className="text-red-900 text-sm font-bold shrink-0" aria-hidden>!</span>
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-semibold text-red-950 mb-1">Error</p>
+                  <p className="text-sm text-red-900 mb-3">{errorState}</p>
                   <button
+                    type="button"
                     onClick={() => {
                       setErrorState(null);
                       setStreamingProgress(null);
                     }}
-                    className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg text-sm font-medium transition-colors"
+                    className="px-4 py-2 bg-red-800 hover:bg-red-900 text-white rounded-lg text-sm font-medium transition-colors"
                   >
                     Retry
                   </button>
@@ -564,8 +572,8 @@ Upload a prescription photo or ask a question. Use the shortcuts below to open d
       {/* Image Preview - Contained Section */}
       {images.length > 0 && (
         <div className="border-t border-slate-200/90 bg-white px-4 sm:px-6 py-3">
-          <div className="max-w-2xl mx-auto">
-            <p className="text-sm font-medium text-slate-700 mb-3">Prescription Images</p>
+          <div className="mx-auto w-full max-w-3xl">
+            <p className="text-sm font-medium text-slate-800 mb-3">Prescription images</p>
             <div className="flex gap-3 overflow-x-auto pb-2">
               {imagePreviews.map((preview, idx) => (
                 <div key={idx} className="relative flex-shrink-0">
@@ -591,7 +599,7 @@ Upload a prescription photo or ask a question. Use the shortcuts below to open d
 
       {/* Input Area - Contained Section */}
       <div className="border-t border-slate-200/90 bg-white px-4 sm:px-6 py-3 sm:py-4">
-        <div className="max-w-2xl mx-auto">
+        <div className="mx-auto w-full max-w-3xl">
           <form onSubmit={handleSend} className="flex gap-2 sm:gap-3 items-stretch">
             <input
               ref={fileInputRef}

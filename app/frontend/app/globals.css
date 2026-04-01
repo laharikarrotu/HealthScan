@@ -20,6 +20,79 @@
   --glass-bg: rgba(255, 255, 255, 0.8);
   --glass-border: rgba(2, 132, 199, 0.2);
   --medical-shadow: rgba(2, 132, 199, 0.1);
+  /* Unified app UI (contrast: body text ≥ slate-600 on white) */
+  --hs-text-muted: #475569;
+}
+
+/* Shared layout + form patterns — all main pages use these for consistency */
+@layer utilities {
+  /* Hero photo + light wash so centered content stays readable (asset: public/healthscan-hero.png) */
+  .hs-page {
+    @apply min-h-0 h-full w-full overflow-y-auto text-slate-900 relative isolate;
+    background-color: rgb(248 250 252);
+  }
+  .hs-page::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background-color: rgb(248 250 252);
+    background-image:
+      radial-gradient(ellipse 100% 70% at 50% 0%, rgb(248 250 252 / 0.97), transparent 58%),
+      linear-gradient(
+        90deg,
+        rgb(248 250 252 / 0.88) 0%,
+        rgb(248 250 252 / 0.72) 50%,
+        rgb(248 250 252 / 0.88) 100%
+      ),
+      linear-gradient(
+        180deg,
+        rgb(248 250 252 / 0.55) 0%,
+        rgb(248 250 252 / 0.4) 45%,
+        rgb(248 250 252 / 0.65) 100%
+      ),
+      url("/healthscan-hero.png");
+    background-size: auto, auto, auto, cover;
+    background-position: center, center, center, 62% center;
+    background-repeat: no-repeat;
+  }
+  .hs-inner {
+    @apply w-full max-w-3xl mx-auto px-4 sm:px-6 py-6 sm:py-8 relative z-[1];
+  }
+  .hs-eyebrow {
+    @apply text-xs font-medium text-slate-600 uppercase tracking-wide mb-1;
+  }
+  .hs-title {
+    @apply text-2xl sm:text-3xl font-semibold text-slate-900 tracking-tight;
+  }
+  .hs-lede {
+    @apply text-sm text-slate-600 mt-2 max-w-xl leading-relaxed;
+  }
+  .hs-card {
+    @apply bg-white border border-slate-200 rounded-xl shadow-sm;
+  }
+  .hs-field {
+    @apply w-full rounded-xl border border-slate-200 bg-white px-3.5 py-3 text-sm text-slate-900 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-slate-400/35 focus:border-slate-400 min-h-[44px];
+  }
+  .hs-label {
+    @apply block text-sm font-semibold text-slate-800 mb-2;
+  }
+  .hs-btn {
+    @apply inline-flex items-center justify-center w-full bg-slate-900 hover:bg-slate-800 text-white font-medium py-3 px-6 rounded-xl disabled:opacity-50 disabled:cursor-not-allowed transition-colors text-sm min-h-[44px];
+  }
+  .hs-tabs {
+    @apply flex flex-col sm:flex-row gap-1.5 sm:gap-1 p-1.5 rounded-xl bg-slate-100 border border-slate-200;
+  }
+  .hs-tab {
+    @apply flex-1 px-3 py-2.5 rounded-lg text-xs sm:text-sm font-medium min-h-[44px] transition-colors border border-transparent text-center;
+  }
+  .hs-tab-active {
+    @apply bg-slate-900 text-white border-slate-900 shadow-sm;
+  }
+  .hs-tab-idle {
+    @apply text-slate-800 bg-transparent hover:bg-white hover:border-slate-200;
+  }
 }
 
 @theme inline {
@@ -407,6 +480,10 @@ select:focus-visible {
 
 /* High Contrast Mode Support */
 @media (prefers-contrast: high) {
+  .hs-page::before {
+    background-image: none;
+    background-color: rgb(248 250 252);
+  }
   .medical-card {
     border-width: 2px;
     border-color: var(--foreground);
