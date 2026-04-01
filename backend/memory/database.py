@@ -4,6 +4,7 @@ Database setup for Supabase/Postgres
 from sqlalchemy import create_engine, Column, String, Integer, DateTime, JSON, Text
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
+from sqlalchemy.pool import StaticPool
 from datetime import datetime
 import os
 from pydantic_settings import BaseSettings
@@ -31,11 +32,11 @@ if db_settings.database_url.startswith("postgresql"):
     )
 else:
     # SQLite fallback (not recommended for production)
-    engine = create_engine(
-        db_settings.database_url,
-        connect_args={"check_same_thread": False},
-        pool_pre_ping=True
-    )
+    _sqlite_kw = {"connect_args": {"check_same_thread": False}, "pool_pre_ping": True}
+    if ":memory:" in db_settings.database_url:
+        # Single shared connection so create_all and API requests see the same DB
+        _sqlite_kw["poolclass"] = StaticPool
+    engine = create_engine(db_settings.database_url, **_sqlite_kw)
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()
@@ -97,6 +98,20 @@ class ExecutionResult(Base):
     error = Column(Text, nullable=True)
     logs = Column(JSON, nullable=True)
     created_at = Column(DateTime, default=datetime.utcnow)
+
+
+class AllergyProfile(Base):
+    """
+    Client-scoped allergy list for patient-safety workflows.
+    Tied to X-Client-Session-Id until full account auth is used.
+    """
+    __tablename__ = "allergy_profiles"
+
+    id = Column(Integer, primary_key=True, index=True)
+    client_session_id = Column(String(64), unique=True, index=True, nullable=False)
+    allergens = Column(JSON, nullable=False)  # list[str]
+    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+
 
 # Create tables
 def init_db():

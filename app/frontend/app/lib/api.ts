@@ -24,6 +24,60 @@ const getApiBaseUrl = (): string => {
 
 export const API_BASE_URL = getApiBaseUrl();
 
+const CLIENT_SESSION_KEY = 'healthscan_client_session_id';
+const SESSION_HEADER = 'X-Client-Session-Id';
+
+/** Stable id for patient-safety APIs (allergy profile); not authentication by itself. */
+export function getOrCreateClientSessionId(): string {
+  if (typeof window === 'undefined') {
+    return '';
+  }
+  try {
+    let id = window.localStorage.getItem(CLIENT_SESSION_KEY);
+    if (!id || id.length < 8) {
+      id =
+        typeof crypto !== 'undefined' && crypto.randomUUID
+          ? crypto.randomUUID()
+          : `hs_${Date.now()}_${Math.random().toString(36).slice(2, 12)}`;
+      window.localStorage.setItem(CLIENT_SESSION_KEY, id);
+    }
+    return id;
+  } catch {
+    return `hs_${Date.now()}_${Math.random().toString(36).slice(2, 12)}`;
+  }
+}
+
+export async function fetchAllergyProfile(): Promise<{ allergens: string[]; updated_at: string | null }> {
+  const sessionId = getOrCreateClientSessionId();
+  if (!sessionId) {
+    return { allergens: [], updated_at: null };
+  }
+  const response = await fetch(`${API_BASE_URL}/patient-safety/allergy-profile`, {
+    method: 'GET',
+    headers: { [SESSION_HEADER]: sessionId },
+  });
+  if (!response.ok) {
+    return { allergens: [], updated_at: null };
+  }
+  return response.json();
+}
+
+export async function saveAllergyProfile(allergens: string[]): Promise<boolean> {
+  const sessionId = getOrCreateClientSessionId();
+  if (!sessionId) {
+    return false;
+  }
+  const response = await fetch(`${API_BASE_URL}/patient-safety/allergy-profile`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+      [SESSION_HEADER]: sessionId,
+    },
+    body: JSON.stringify({ allergens }),
+  });
+  return response.ok;
+}
+
 // Re-export types for convenience
 export type { AnalyzeResponse, ExtractPrescriptionResponse, StreamingProgress, StreamingCallback };
 

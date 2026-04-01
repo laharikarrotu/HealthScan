@@ -349,9 +349,14 @@ p {
 }
 
 .medical-card:hover {
-  box-shadow: 0 10px 25px -5px rgba(2, 132, 199, 0.12), 0 4px 10px -2px rgba(2, 132, 199, 0.06);
-  transform: translateY(-2px) scale(1.01);
-  border-color: rgba(2, 132, 199, 0.2);
+  box-shadow: 0 4px 12px -2px rgba(15, 23, 42, 0.08);
+  border-color: rgba(148, 163, 184, 0.35);
+}
+
+/* Form panels: no lift on hover (less noisy than default .medical-card) */
+.panel-static:hover {
+  transform: none;
+  box-shadow: 0 1px 3px 0 rgba(15, 23, 42, 0.06);
 }
 
 /* Accessibility - Focus Indicators */
@@ -431,20 +436,14 @@ select:focus-visible {
 
 /* Mobile-specific improvements */
 @media (max-width: 640px) {
-  /* Ensure buttons are at least 44x44px for touch targets */
-  button, a, input[type="button"], input[type="submit"], label {
-    min-height: 44px;
-    min-width: 44px;
-  }
-  
-  /* Better text sizing on mobile */
   body {
     font-size: 16px; /* Prevents zoom on iOS */
   }
-  
-  /* Prevent horizontal scroll */
-  * {
+
+  img,
+  video {
     max-width: 100%;
+    height: auto;
   }
 }
 

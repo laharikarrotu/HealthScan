@@ -2,12 +2,12 @@
 
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useState, type ReactNode } from 'react';
 
 interface NavLinkProps {
   href: string;
   label: string;
-  icon: string;
+  icon?: ReactNode;
   onClick?: () => void;
 }
 
@@ -56,15 +56,15 @@ export default function NavLink({ href, label, icon, onClick }: NavLinkProps) {
     <Link
       href={href}
       onClick={handleClick}
-      className={`px-4 py-2 rounded-lg text-sm font-medium transition-all relative ${
+      className={`nav-link-item inline-flex items-center gap-2 px-3 py-2 rounded-md text-sm font-medium transition-colors relative min-h-0 min-w-0 ${
         isActive
-          ? 'bg-blue-50 text-blue-700 border border-blue-200'
-          : 'text-slate-700 hover:bg-slate-50 hover:text-slate-900'
+          ? 'bg-slate-100 text-slate-900'
+          : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'
       } ${isNavigating ? 'opacity-70 cursor-wait' : ''}`}
       aria-current={isActive ? 'page' : undefined}
     >
-      <span className="mr-2">{icon}</span>
-      {label}
+      {icon != null && <span className="text-slate-500 shrink-0">{icon}</span>}
+      <span className="truncate">{label}</span>
       {isNavigating && (
         <span className="ml-2 inline-block">
           <svg

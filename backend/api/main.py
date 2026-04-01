@@ -9,7 +9,7 @@ import os
 
 from api.config import settings
 from api.auth import auth_router
-from api.routers import prescription, medication, nutrition, vision, auth, monitoring, chat
+from api.routers import prescription, medication, nutrition, vision, auth, monitoring, chat, allergy_profile
 from core.middleware import RequestLoggingMiddleware, PerformanceMiddleware
 from core.logger import get_logger
 
@@ -52,6 +52,7 @@ app = FastAPI(
     
     * **Prescription Extraction**: Extract medication details from prescription images
     * **Drug Interaction Checking**: Check for drug-drug and drug-allergy interactions
+    * **Patient safety**: Structured allergy profile (`/patient-safety/allergy-profile`) with audit logging; optional step-up headers for future biometric/WebAuthn binding
     * **Diet Recommendations**: Get personalized diet recommendations based on medical conditions
     * **Form Automation**: Automate medical form filling using AI vision and browser automation
     
@@ -75,8 +76,14 @@ app.add_middleware(
     CORSMiddleware,
     allow_origins=allowed_origins,
     allow_credentials=True,
-    allow_methods=["GET", "POST", "OPTIONS"],
-    allow_headers=["Content-Type", "Authorization", "X-Requested-With"],
+    allow_methods=["GET", "POST", "PUT", "OPTIONS"],
+    allow_headers=[
+        "Content-Type",
+        "Authorization",
+        "X-Requested-With",
+        "X-Client-Session-Id",
+        "X-Step-Up-Verified",
+    ],
 )
 
 # Add compression middleware for better performance
@@ -108,6 +115,7 @@ app.include_router(medication.router)  # Drug interactions
 app.include_router(nutrition.router)  # Diet recommendations
 app.include_router(vision.router)  # Vision analysis and automation
 app.include_router(chat.router)  # Conversational AI chat
+app.include_router(allergy_profile.router)  # Allergy record + patient-safety audit hooks
 app.include_router(monitoring.router)  # Metrics
 
 # Basic health endpoints

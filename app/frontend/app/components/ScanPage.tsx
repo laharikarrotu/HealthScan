@@ -9,6 +9,7 @@ import ProgressTracker from './ProgressTracker';
 import DataVerification from './DataVerification';
 import { useHealthScan } from '../context/HealthScanContext';
 import { safeStorage } from '../lib/storage';
+import MobileScanQrPanel from './MobileScanQrPanel';
 
 export default function ScanPage() {
   const router = useRouter();
@@ -296,36 +297,30 @@ export default function ScanPage() {
           onCancel={handleVerificationCancel}
         />
       )}
-      <div className="h-full w-full text-slate-800 relative overflow-y-auto">
-        {/* Medical Background */}
-        <div className="absolute inset-0 bg-gradient-to-br from-sky-50 via-blue-50 to-cyan-50">
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(2,132,199,0.05),transparent_50%)]"></div>
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_20%,rgba(6,182,212,0.05),transparent_50%)]"></div>
-        </div>
-
-        <div className="relative w-full mx-auto px-6 md:px-10 py-4 md:py-6 z-10">
-          <div className="mb-6 sm:mb-8 text-center">
-            <div className="inline-flex items-center justify-center w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-gradient-to-br from-blue-500 via-cyan-500 to-teal-500 mb-4 shadow-lg glow-teal medical-card">
-              <span className="text-2xl sm:text-3xl">📋</span>
-            </div>
-            <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-2 gradient-text">HealthScan</h1>
-            <p className="text-sm sm:text-base text-slate-600 font-medium px-2">Your AI healthcare assistant - scan forms, prescriptions, and documents</p>
-          </div>
+      <div className="h-full w-full text-slate-800 overflow-y-auto bg-slate-50">
+        <div className="max-w-3xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
+          <header className="mb-8">
+            <p className="text-xs font-medium text-slate-500 uppercase tracking-wide mb-1">Scan</p>
+            <h1 className="text-2xl sm:text-3xl font-semibold text-slate-900 tracking-tight">Prescriptions &amp; documents</h1>
+            <p className="text-sm text-slate-600 mt-2 max-w-xl leading-relaxed">
+              Upload an image. Leave the goal empty for fast prescription extraction, or describe what you need for forms and automation.
+            </p>
+          </header>
         
         {/* Progress Tracker */}
         <ProgressTracker />
 
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* Image Upload Section */}
-          <div className="medical-card p-4 sm:p-6">
-            <h2 className="text-lg sm:text-xl font-semibold mb-4 text-slate-800">1. Upload or Capture Image</h2>
+          <div className="medical-card panel-static p-4 sm:p-5 rounded-xl">
+            <h2 className="text-sm font-semibold text-slate-900 mb-3">1. Image</h2>
             
             {imagePreview ? (
               <div className="space-y-4">
                 <img
                   src={imagePreview}
                   alt="Preview"
-                  className="max-w-full h-auto rounded-xl border-2 border-blue-200 shadow-md"
+                  className="max-w-full h-auto rounded-xl border border-slate-200 shadow-sm"
                 />
                 <button
                   type="button"
@@ -345,9 +340,9 @@ export default function ScanPage() {
                     onChange={handleFileSelect}
                     className="hidden"
                   />
-                  <div className="border-2 border-dashed border-blue-300 rounded-xl p-8 text-center hover:border-blue-400 hover:bg-blue-50/50 transition-all medical-card">
-                    <p className="text-slate-700 font-medium">Click to upload</p>
-                    <p className="text-sm text-slate-500 mt-2">or drag and drop</p>
+                  <div className="border border-dashed border-slate-300 rounded-xl p-8 text-center hover:border-slate-400 hover:bg-slate-50/80 transition-colors">
+                    <p className="text-slate-800 font-medium text-sm">Upload from files</p>
+                    <p className="text-xs text-slate-500 mt-1">PNG, JPG, or PDF</p>
                   </div>
                 </label>
                 
@@ -360,33 +355,35 @@ export default function ScanPage() {
                     onChange={handleCameraCapture}
                     className="hidden"
                   />
-                  <div className="border-2 border-dashed border-blue-300 rounded-xl p-8 text-center hover:border-blue-400 hover:bg-blue-50/50 transition-all medical-card">
-                    <p className="text-slate-700 font-medium">📷 Use Camera</p>
-                    <p className="text-sm text-slate-500 mt-2">Mobile only</p>
+                  <div className="border border-dashed border-slate-300 rounded-xl p-8 text-center hover:border-slate-400 hover:bg-slate-50/80 transition-colors">
+                    <p className="text-slate-800 font-medium text-sm">Use camera</p>
+                    <p className="text-xs text-slate-500 mt-1">This device</p>
                   </div>
                 </label>
               </div>
             )}
+
+            {!imagePreview && <MobileScanQrPanel />}
           </div>
 
           {/* Intent Input */}
-          <div className="medical-card p-4 sm:p-6">
-            <h2 className="text-lg sm:text-xl font-semibold mb-4 text-slate-800">2. What do you need help with?</h2>
+          <div className="medical-card panel-static p-4 sm:p-5 rounded-xl">
+            <h2 className="text-sm font-semibold text-slate-900 mb-3">2. Goal (optional)</h2>
             <textarea
               value={intent}
               onChange={(e) => setIntent(e.target.value)}
-              placeholder="Leave empty for FAST prescription extraction ⚡ OR enter: Fill form, Book appointment, Extract data..."
-              className="w-full medical-card border border-blue-200 rounded-xl px-4 py-3 text-base text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-400 transition-all min-h-[100px]"
+              placeholder="Empty = extract prescription. Or: “Fill this form”, “Extract table”, etc."
+              className="w-full rounded-xl border border-slate-200 px-3.5 py-3 text-sm text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-400/25 focus:border-slate-400 min-h-[100px] bg-white"
               rows={3}
             />
-            <p className="text-sm text-slate-600 mt-2">
-              💡 <strong>Tip:</strong> Leave empty for instant prescription extraction (like ChatGPT) | Or enter intent for form filling
+            <p className="text-xs text-slate-500 mt-2 leading-relaxed">
+              Leaving this blank runs quick prescription extraction when the image looks like a prescription.
             </p>
           </div>
 
           {/* Progress Indicator */}
           {loading && (
-            <div className="medical-card p-4 sm:p-6">
+            <div className="medical-card panel-static p-4 sm:p-5 rounded-xl">
               <ProgressIndicator 
                 steps={['Analyzing Image', 'Planning Actions', 'Executing', 'Complete']}
                 currentStep={progressStep}
@@ -397,8 +394,8 @@ export default function ScanPage() {
           {/* Submit Button */}
           <button
             type="submit"
-            disabled={loading || !image || !intent.trim()}
-            className="w-full btn-primary disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold py-3 sm:py-4 px-6 rounded-xl transition-all flex items-center justify-center gap-2 min-h-[44px]"
+            disabled={loading || !image}
+            className="w-full bg-slate-900 hover:bg-slate-800 disabled:opacity-50 disabled:cursor-not-allowed text-white font-medium py-3 px-6 rounded-xl transition-colors flex items-center justify-center gap-2 text-sm"
           >
             {loading ? (
               <>
@@ -411,18 +408,18 @@ export default function ScanPage() {
           </button>
 
           {(localError || errors.scan) && (
-            <div className="medical-card bg-red-50 border-2 border-red-200 rounded-xl p-4">
+            <div className="rounded-xl border border-red-200 bg-red-50/80 p-4">
               <div className="flex items-start gap-3">
-                <span className="text-2xl">⚠️</span>
+                <span className="text-red-600 text-sm font-semibold shrink-0">!</span>
                 <div className="flex-1">
                   <p className="text-red-800 font-semibold mb-1">Error</p>
                   <p className="text-red-700 text-sm">{localError || errors.scan}</p>
                   {(localError || errors.scan)?.includes('Network') && (
                     <button
                       onClick={handleSubmit}
-                      className="mt-3 px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg text-sm font-medium transition-colors"
+                      className="mt-3 px-4 py-2 bg-red-700 hover:bg-red-800 text-white rounded-lg text-sm font-medium transition-colors"
                     >
-                      🔄 Retry
+                      Retry
                     </button>
                   )}
                 </div>
@@ -560,9 +557,9 @@ export default function ScanPage() {
                         safeStorage.setItem('prescription_image', imagePreview || '');
                         router.push('/interactions');
                       }}
-                      className="px-4 py-2 btn-primary text-white text-sm rounded-xl transition-all"
+                      className="px-4 py-2 bg-slate-900 hover:bg-slate-800 text-white text-sm rounded-xl transition-colors font-medium"
                     >
-                      💊 Check Drug Interactions
+                      Check interactions
                     </button>
                     {result.structured_data.medications && (
                       <button
@@ -576,9 +573,9 @@ export default function ScanPage() {
                           safeStorage.setItem('current_medications', medNames);
                           router.push('/diet');
                         }}
-                        className="px-4 py-2 btn-primary text-white text-sm rounded-xl transition-all min-h-[44px]"
+                        className="px-4 py-2 bg-slate-900 hover:bg-slate-800 text-white text-sm rounded-xl transition-colors font-medium"
                       >
-                        🥗 Get Diet Recommendations
+                        Diet recommendations
                       </button>
                     )}
                   </div>
@@ -645,7 +642,7 @@ export default function ScanPage() {
             </div>
           </div>
         )}
-      </div>
+        </div>
     </div>
     </>
   );

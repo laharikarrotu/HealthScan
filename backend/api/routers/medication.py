@@ -17,6 +17,7 @@ from core.error_handler import ErrorHandler
 from medication.interaction_checker import Medication
 from medication.prescription_extractor import PrescriptionInfo
 from core.logger import get_logger
+from core.audit_logger import AuditAction
 
 logger = get_logger("api.routers.medication")
 router = APIRouter(prefix="/check-prescription-interactions", tags=["medication"])
@@ -179,6 +180,18 @@ async def check_prescription_interactions(
             resource_id=",".join(medication_names),
             ip_address=client_ip
         )
+        if allergy_list:
+            audit_logger.log_phi_access(
+                user_id=None,
+                action=AuditAction.PROCESS,
+                resource_type="allergy_aware_prescribing_check",
+                resource_id=allergies_hash[:24],
+                ip_address=client_ip,
+                additional_info={
+                    "medication_count": len(medications),
+                    "allergy_token_count": len(allergy_list),
+                },
+            )
         
         # Check for interactions
         warnings = await interaction_checker.check_interactions(
