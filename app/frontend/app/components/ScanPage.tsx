@@ -10,6 +10,7 @@ import DataVerification from './DataVerification';
 import { useHealthScan } from '../context/HealthScanContext';
 import { safeStorage } from '../lib/storage';
 import MobileScanQrPanel from './MobileScanQrPanel';
+import PageShell from './PageShell';
 
 export default function ScanPage() {
   const router = useRouter();
@@ -297,7 +298,8 @@ export default function ScanPage() {
           onCancel={handleVerificationCancel}
         />
       )}
-      <div className="hs-page">
+      <PageShell>
+        <div className="hs-page flex flex-1 min-h-0 flex-col">
         <div className="hs-inner">
           <header className="mb-8">
             <p className="hs-eyebrow">Scan</p>
@@ -643,7 +645,8 @@ export default function ScanPage() {
           </div>
         )}
         </div>
-    </div>
+        </div>
+      </PageShell>
     </>
   );
 }

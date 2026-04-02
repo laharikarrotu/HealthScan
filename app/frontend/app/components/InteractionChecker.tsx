@@ -8,6 +8,7 @@ import { useHealthScan } from '../context/HealthScanContext';
 import { API_BASE_URL, fetchAllergyProfile, saveAllergyProfile } from '../lib/api';
 import { safeStorage } from '../lib/storage';
 import MedicalDisclaimer from './MedicalDisclaimer';
+import PageShell from './PageShell';
 
 export default function InteractionChecker() {
   const router = useRouter();
@@ -183,7 +184,8 @@ export default function InteractionChecker() {
   };
 
   return (
-    <div className="hs-page">
+    <PageShell>
+      <div className="hs-page flex flex-1 min-h-0 flex-col">
       <div className="hs-inner">
         <header className="mb-8">
           <p className="hs-eyebrow">Safety check</p>
@@ -418,7 +420,8 @@ export default function InteractionChecker() {
         {/* Footer Medical Disclaimer */}
         <MedicalDisclaimer variant="footer" className="mt-10" />
       </div>
-    </div>
+      </div>
+    </PageShell>
   );
 }
 

@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useHealthScan } from '../context/HealthScanContext';
 import { API_BASE_URL } from '../lib/api';
 import type { PrescriptionInfo } from '../lib/types';
+import PageShell from './PageShell';
 import MedicalDisclaimer from './MedicalDisclaimer';
 import PrescriptionCard from './PrescriptionCard';
 import StreamingProgress from './StreamingProgress';
@@ -30,16 +31,7 @@ export default function ChatAgent() {
     setDietData,
   } = useHealthScan();
 
-  const [messages, setMessages] = useState<Message[]>([
-    {
-      id: '1',
-      role: 'assistant',
-      content: `**Welcome to HealthScan**
-
-Upload a prescription photo or ask a question. Use the shortcuts below to open dedicated tools when you prefer a step-by-step flow.`,
-      timestamp: new Date(),
-    },
-  ]);
+  const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState('');
   const [images, setImages] = useState<File[]>([]);
   const [imagePreviews, setImagePreviews] = useState<string[]>([]);
@@ -433,139 +425,170 @@ Upload a prescription photo or ask a question. Use the shortcuts below to open d
     }
   };
 
+  const showEmptyState = messages.length === 0 && !loading;
+
   return (
-    <div className="flex flex-col h-full w-full text-slate-900" role="main" aria-label="HealthScan Chat Assistant">
-      {/* Main Content Container - Properly Contained */}
-      <div className="hs-page flex-1 min-h-0">
-        <div className="hs-inner">
-          <header className="mb-6 sm:mb-8 pb-5 border-b border-slate-200">
+    <PageShell role="main" aria-label="HealthScan Chat Assistant">
+      <div className="hs-page flex flex-1 min-h-0 flex-col overflow-hidden">
+        <div className="hs-inner flex flex-1 flex-col min-h-0 pb-4">
+          <header className="mb-4 sm:mb-5 pb-4 border-b border-slate-200/90 shrink-0">
             <p className="hs-eyebrow">Home</p>
             <h1 className="hs-title">Assistant</h1>
             <p className="hs-lede">
-              Upload prescription photos or type a question. Layout matches the rest of HealthScan on phones, tablets, and desktops.
+              Upload a prescription photo first, or ask a question below. Use more tools for guided flows.
             </p>
           </header>
-          {/* Quick Actions Grid - Contained in Card */}
-          {messages.length === 1 && messages[0].role === 'assistant' && !loading && (
-            <div className="hs-card panel-static p-5 mb-6">
-              <h2 className="text-sm font-semibold text-slate-600 uppercase tracking-wide mb-3">Shortcuts</h2>
-              <div className="grid grid-cols-2 gap-3">
-                <button
-                  type="button"
-                  onClick={() => fileInputRef.current?.click()}
-                  className="rounded-lg border border-slate-200 bg-slate-50/50 p-4 text-left hover:bg-slate-50 hover:border-slate-300 transition-colors"
-                >
-                  <IconUpload className="w-5 h-5 text-slate-600 mb-2" />
-                  <h3 className="text-sm font-semibold text-slate-900">Upload here</h3>
-                  <p className="text-xs text-slate-600 mt-0.5 leading-snug">Add images to this chat</p>
-                </button>
-                <button
-                  type="button"
-                  onClick={() => router.push('/scan')}
-                  className="rounded-lg border border-slate-200 bg-slate-50/50 p-4 text-left hover:bg-slate-50 hover:border-slate-300 transition-colors"
-                >
-                  <IconScan className="w-5 h-5 text-slate-600 mb-2" />
-                  <h3 className="text-sm font-semibold text-slate-900">Scan workflow</h3>
-                  <p className="text-xs text-slate-600 mt-0.5 leading-snug">Guided extraction &amp; forms</p>
-                </button>
-                <button
-                  type="button"
-                  onClick={() => router.push('/interactions')}
-                  className="rounded-lg border border-slate-200 bg-slate-50/50 p-4 text-left hover:bg-slate-50 hover:border-slate-300 transition-colors"
-                >
-                  <IconPill className="w-5 h-5 text-slate-600 mb-2" />
-                  <h3 className="text-sm font-semibold text-slate-900">Interactions</h3>
-                  <p className="text-xs text-slate-600 mt-0.5 leading-snug">Multiple prescriptions</p>
-                </button>
-                <button
-                  type="button"
-                  onClick={() => router.push('/diet')}
-                  className="rounded-lg border border-slate-200 bg-slate-50/50 p-4 text-left hover:bg-slate-50 hover:border-slate-300 transition-colors"
-                >
-                  <IconWellness className="w-5 h-5 text-slate-600 mb-2" />
-                  <h3 className="text-sm font-semibold text-slate-900">Diet</h3>
-                  <p className="text-xs text-slate-600 mt-0.5 leading-snug">Condition-aware tips</p>
-                </button>
-              </div>
-            </div>
-          )}
 
-          {/* Chat Messages - Contained */}
-          <div className="space-y-4" role="log" aria-live="polite" aria-label="Chat messages">
-            {messages.map((msg, idx) => (
+          <div className="flex flex-1 flex-col min-h-0 -mx-4 sm:-mx-6 px-4 sm:px-6">
+            <div className="flex flex-1 min-h-0 overflow-y-auto overscroll-contain">
               <div
-                key={msg.id}
-                className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
+                className={`flex w-full flex-col flex-1 min-h-full gap-4 ${
+                  showEmptyState ? 'justify-end' : 'justify-start'
+                }`}
               >
-                <div
-                  className={`max-w-[85%] sm:max-w-[80%] rounded-xl px-4 py-3 ${
-                    msg.role === 'user'
-                      ? 'bg-slate-800 text-white'
-                      : 'bg-white border border-slate-200/90 text-slate-800 shadow-sm'
-                  }`}
-                >
-                  {msg.image && (
-                    <div className="mb-3 rounded-lg overflow-hidden">
-                      <img src={msg.image} alt="Uploaded prescription" className="max-w-xs w-full h-auto" />
+                {showEmptyState && (
+                  <div className="w-full space-y-4">
+                    <div>
+                      <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-slate-600">
+                        Start here
+                      </p>
+                      <button
+                        type="button"
+                        onClick={() => fileInputRef.current?.click()}
+                        className="flex min-h-[52px] w-full items-center justify-center gap-2.5 rounded-xl bg-slate-900 px-5 py-4 text-base font-semibold text-white shadow-md transition-colors hover:bg-slate-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-900 focus-visible:ring-offset-2"
+                      >
+                        <IconUpload className="h-6 w-6 shrink-0" aria-hidden />
+                        Upload prescription
+                      </button>
                     </div>
-                  )}
-                  {msg.prescriptionData && (
-                    <div className="mb-3">
-                      <PrescriptionCard prescription={msg.prescriptionData} />
+                    <div>
+                      <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-slate-600">
+                        More tools
+                      </p>
+                      <div className="grid grid-cols-1 gap-2 sm:grid-cols-3">
+                        <button
+                          type="button"
+                          onClick={() => router.push('/scan')}
+                          className="rounded-xl border border-slate-200 bg-white p-3 text-left shadow-sm ring-1 ring-slate-200/80 transition-colors hover:border-slate-300 hover:bg-slate-50"
+                        >
+                          <IconScan className="mb-1.5 h-5 w-5 text-slate-600" aria-hidden />
+                          <h3 className="text-sm font-semibold text-slate-900">Scan workflow</h3>
+                          <p className="mt-0.5 text-xs leading-snug text-slate-600">
+                            Guided extraction &amp; forms
+                          </p>
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => router.push('/interactions')}
+                          className="rounded-xl border border-slate-200 bg-white p-3 text-left shadow-sm ring-1 ring-slate-200/80 transition-colors hover:border-slate-300 hover:bg-slate-50"
+                        >
+                          <IconPill className="mb-1.5 h-5 w-5 text-slate-600" aria-hidden />
+                          <h3 className="text-sm font-semibold text-slate-900">Interactions</h3>
+                          <p className="mt-0.5 text-xs leading-snug text-slate-600">
+                            Multiple prescriptions
+                          </p>
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => router.push('/diet')}
+                          className="rounded-xl border border-slate-200 bg-white p-3 text-left shadow-sm ring-1 ring-slate-200/80 transition-colors hover:border-slate-300 hover:bg-slate-50"
+                        >
+                          <IconWellness className="mb-1.5 h-5 w-5 text-slate-600" aria-hidden />
+                          <h3 className="text-sm font-semibold text-slate-900">Diet</h3>
+                          <p className="mt-0.5 text-xs leading-snug text-slate-600">
+                            Condition-aware tips
+                          </p>
+                        </button>
+                      </div>
                     </div>
-                  )}
-                  <div className="whitespace-pre-wrap leading-relaxed text-sm [&_strong]:font-semibold">
-                    {msg.content}
+                    <p className="mx-auto max-w-md text-center text-xs text-slate-600">
+                      Replies appear here. The composer stays fixed at the bottom.
+                    </p>
                   </div>
-                  <div className={`text-[11px] mt-2 tabular-nums ${msg.role === 'user' ? 'text-slate-300' : 'text-slate-600'}`}>
-                    {msg.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                  </div>
-                </div>
-              </div>
-            ))}
-            
-            <div ref={messagesEndRef} />
-          </div>
+                )}
 
-          {/* Status Messages - Contained, Not Overlaying */}
-          {streamingProgress && (
-            <div className="mt-4 rounded-xl border border-slate-200 bg-slate-100/80 p-4">
-              <StreamingProgress 
-                step={streamingProgress.step}
-                progress={streamingProgress.progress}
-                message={streamingProgress.message}
-              />
-            </div>
-          )}
-          
-          {loading && !streamingProgress && (
-            <div className="mt-4 rounded-xl border border-slate-200 bg-slate-100/80 p-4 flex items-center gap-3">
-              <div className="spinner w-5 h-5 border-2 border-slate-700 border-t-transparent"></div>
-              <span className="text-sm text-slate-900 font-medium">Analyzing your prescription…</span>
-            </div>
-          )}
-          
-          {errorState && (
-            <div className="mt-4 rounded-xl border border-red-200 bg-red-50/90 p-4">
-              <div className="flex items-start gap-3">
-                <span className="text-red-900 text-sm font-bold shrink-0" aria-hidden>!</span>
-                <div className="flex-1 min-w-0">
-                  <p className="text-sm font-semibold text-red-950 mb-1">Error</p>
-                  <p className="text-sm text-red-900 mb-3">{errorState}</p>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setErrorState(null);
-                      setStreamingProgress(null);
-                    }}
-                    className="px-4 py-2 bg-red-800 hover:bg-red-900 text-white rounded-lg text-sm font-medium transition-colors"
-                  >
-                    Retry
-                  </button>
+                <div className="flex w-full flex-col gap-4" role="log" aria-live="polite" aria-label="Chat messages">
+                  {messages.map((msg) => (
+                    <div
+                      key={msg.id}
+                      className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
+                    >
+                      <div
+                        className={`max-w-[85%] sm:max-w-[80%] rounded-xl px-4 py-3 ${
+                          msg.role === 'user'
+                            ? 'bg-slate-900 text-white shadow-md'
+                            : 'border border-slate-300/90 bg-white text-slate-900 shadow-md ring-1 ring-slate-200/80'
+                        }`}
+                      >
+                        {msg.image && (
+                          <div className="mb-3 overflow-hidden rounded-lg">
+                            <img src={msg.image} alt="Uploaded prescription" className="max-w-xs w-full h-auto" />
+                          </div>
+                        )}
+                        {msg.prescriptionData && (
+                          <div className="mb-3">
+                            <PrescriptionCard prescription={msg.prescriptionData} />
+                          </div>
+                        )}
+                        <div className="whitespace-pre-wrap text-sm leading-relaxed [&_strong]:font-semibold">
+                          {msg.content}
+                        </div>
+                        <div
+                          className={`mt-2 text-[11px] tabular-nums ${
+                            msg.role === 'user' ? 'text-slate-300' : 'text-slate-600'
+                          }`}
+                        >
+                          {msg.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                  <div ref={messagesEndRef} />
                 </div>
+
+                {streamingProgress && (
+                  <div className="mt-4 rounded-xl border border-slate-200 bg-white p-4 shadow-sm ring-1 ring-slate-200/80">
+                    <StreamingProgress
+                      step={streamingProgress.step}
+                      progress={streamingProgress.progress}
+                      message={streamingProgress.message}
+                    />
+                  </div>
+                )}
+
+                {loading && !streamingProgress && (
+                  <div className="mt-4 flex items-center gap-3 rounded-xl border border-slate-200 bg-white p-4 shadow-sm ring-1 ring-slate-200/80">
+                    <div className="spinner h-5 w-5 border-2 border-slate-700 border-t-transparent" />
+                    <span className="text-sm font-medium text-slate-900">Analyzing your prescription…</span>
+                  </div>
+                )}
+
+                {errorState && (
+                  <div className="mt-4 rounded-xl border border-red-200 bg-red-50/90 p-4">
+                    <div className="flex items-start gap-3">
+                      <span className="shrink-0 text-sm font-bold text-red-900" aria-hidden>
+                        !
+                      </span>
+                      <div className="min-w-0 flex-1">
+                        <p className="mb-1 text-sm font-semibold text-red-950">Error</p>
+                        <p className="mb-3 text-sm text-red-900">{errorState}</p>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setErrorState(null);
+                            setStreamingProgress(null);
+                          }}
+                          className="rounded-lg bg-red-800 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-red-900"
+                        >
+                          Retry
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
-          )}
+          </div>
         </div>
       </div>
 
@@ -597,58 +620,59 @@ Upload a prescription photo or ask a question. Use the shortcuts below to open d
         </div>
       )}
 
-      {/* Input Area - Contained Section */}
-      <div className="border-t border-slate-200/90 bg-white px-4 sm:px-6 py-3 sm:py-4">
+      {/* Composer — docked to bottom, visually grouped with input + send */}
+      <div className="shrink-0 border-t border-slate-200/90 bg-white/95 px-4 py-3 backdrop-blur-sm sm:px-6 sm:py-4">
         <div className="mx-auto w-full max-w-3xl">
-          <form onSubmit={handleSend} className="flex gap-2 sm:gap-3 items-stretch">
-            <input
-              ref={fileInputRef}
-              type="file"
-              accept="image/*"
-              multiple
-              onChange={handleFileSelect}
-              className="hidden"
-              id="file-input"
-            />
-            <label
-              htmlFor="file-input"
-              className="shrink-0 w-11 h-11 sm:w-12 sm:h-12 rounded-xl cursor-pointer inline-flex items-center justify-center bg-slate-100 hover:bg-slate-200 text-slate-600 transition-colors touch-manipulation"
-              title="Upload prescription images"
-            >
-              <IconUpload className="w-5 h-5" />
-            </label>
-            <input
-              type="text"
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              placeholder="Ask about medications, interactions, diet..."
-              className="flex-1 rounded-xl px-3.5 py-2.5 text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-400/30 focus:border-slate-400 border border-slate-200 bg-white min-w-0 text-sm"
-              disabled={loading}
-              aria-label="Type your health question or message"
-            />
-            <button
-              type="submit"
-              disabled={loading || (!input.trim() && images.length === 0)}
-              className="shrink-0 px-4 sm:px-5 py-2.5 bg-slate-900 hover:bg-slate-800 disabled:opacity-50 disabled:cursor-not-allowed text-white rounded-xl font-medium text-sm transition-colors touch-manipulation"
-            >
-              {loading ? (
-                <>
-                  <div className="spinner w-4 h-4 border-2 border-white border-t-transparent inline-block mr-2"></div>
-                  <span className="hidden sm:inline">Sending...</span>
-                </>
-              ) : (
-                'Send'
-              )}
-            </button>
-          </form>
-          
-          {/* Medical Disclaimer */}
+          <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-slate-600">Message</p>
+          <div className="rounded-2xl border-2 border-slate-200 bg-white p-1.5 shadow-md ring-1 ring-slate-200/60 sm:p-2">
+            <form onSubmit={handleSend} className="flex items-stretch gap-2 sm:gap-3">
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept="image/*"
+                multiple
+                onChange={handleFileSelect}
+                className="hidden"
+                id="file-input"
+              />
+              <label
+                htmlFor="file-input"
+                className="inline-flex h-11 w-11 shrink-0 cursor-pointer items-center justify-center rounded-xl border border-slate-200 bg-slate-50 text-slate-700 transition-colors hover:bg-slate-100 sm:h-12 sm:w-12 touch-manipulation"
+                title="Add prescription images"
+              >
+                <IconUpload className="h-5 w-5" aria-hidden />
+              </label>
+              <input
+                type="text"
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+                placeholder="Type your question…"
+                className="min-h-[44px] min-w-0 flex-1 rounded-xl border border-slate-200 bg-slate-50/80 px-3.5 py-3 text-sm text-slate-900 placeholder:text-slate-500 focus:border-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-400/35"
+                disabled={loading}
+                aria-label="Type your health question or message"
+              />
+              <button
+                type="submit"
+                disabled={loading || (!input.trim() && images.length === 0)}
+                className="shrink-0 rounded-xl bg-slate-900 px-4 py-3 text-sm font-semibold text-white transition-colors hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-50 sm:px-6 touch-manipulation"
+              >
+                {loading ? (
+                  <span className="inline-flex items-center gap-2">
+                    <span className="spinner inline-block h-4 w-4 border-2 border-white border-t-transparent" />
+                    <span className="hidden sm:inline">Sending</span>
+                  </span>
+                ) : (
+                  'Send'
+                )}
+              </button>
+            </form>
+          </div>
           <div className="mt-3">
             <MedicalDisclaimer variant="compact" />
           </div>
         </div>
       </div>
-    </div>
+    </PageShell>
   );
 }
 

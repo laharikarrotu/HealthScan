@@ -31,7 +31,7 @@ export default function Nav() {
           </Link>
 
           {/* Desktop Navigation - Using NavLink with loading states */}
-          <div className="hidden md:flex items-center gap-0.5 p-0.5 rounded-lg bg-slate-100/80">
+          <div className="hidden md:flex items-center gap-1 p-1 rounded-xl bg-slate-100/90 border border-slate-200/80">
             {navLinks.map((link) => (
               <NavLink
                 key={link.href}
@@ -61,7 +61,7 @@ export default function Nav() {
           
         {/* Mobile Navigation - Using NavLink with loading states */}
           {mobileMenuOpen && (
-          <div className="md:hidden border-t border-slate-200 py-2 flex flex-col gap-0.5">
+          <div className="md:hidden border-t border-slate-200 py-3 flex flex-col gap-1.5">
             {navLinks.map((link) => (
               <NavLink
                 key={link.href}

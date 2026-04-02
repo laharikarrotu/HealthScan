@@ -1,8 +1,9 @@
 import dynamic from 'next/dynamic';
+import RouteLoading from '../components/RouteLoading';
 
 // Lazy load InteractionChecker for code splitting
 const InteractionChecker = dynamic(() => import('../components/InteractionChecker'), {
-  loading: () => <div className="flex items-center justify-center h-screen"><div className="text-blue-600">Loading interaction checker...</div></div>,
+  loading: () => <RouteLoading label="Loading interactions…" />,
 });
 
 export default function InteractionsPage() {

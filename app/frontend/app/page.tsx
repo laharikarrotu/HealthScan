@@ -1,10 +1,11 @@
 'use client';
 
 import dynamic from 'next/dynamic';
+import RouteLoading from './components/RouteLoading';
 
 // Lazy load ChatAgent for better initial page load
 const ChatAgent = dynamic(() => import('./components/ChatAgent'), {
-  loading: () => <div className="flex items-center justify-center h-screen"><div className="text-blue-600">Loading...</div></div>,
+  loading: () => <RouteLoading label="Loading assistant…" />,
   ssr: false // ChatAgent uses client-side features
 });
 

@@ -7,6 +7,7 @@ import { useHealthScan } from '../context/HealthScanContext';
 import { API_BASE_URL } from '../lib/api';
 import { safeStorage } from '../lib/storage';
 import MedicalDisclaimer from './MedicalDisclaimer';
+import PageShell from './PageShell';
 
 export default function DietPortal() {
   const {
@@ -233,7 +234,8 @@ export default function DietPortal() {
   };
 
   return (
-    <div className="hs-page">
+    <PageShell>
+      <div className="hs-page flex flex-1 min-h-0 flex-col">
       <div className="hs-inner">
         <header className="mb-8">
           <p className="hs-eyebrow">Diet</p>
@@ -742,6 +744,7 @@ export default function DietPortal() {
 
         <MedicalDisclaimer variant="footer" className="mt-10" />
       </div>
-    </div>
+      </div>
+    </PageShell>
   );
 }

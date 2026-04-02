@@ -56,14 +56,16 @@ export default function NavLink({ href, label, icon, onClick }: NavLinkProps) {
     <Link
       href={href}
       onClick={handleClick}
-      className={`nav-link-item inline-flex items-center gap-2 px-3 py-2 rounded-md text-sm font-medium transition-colors relative min-h-0 min-w-0 ${
+      className={`nav-link-item inline-flex items-center gap-2 px-3.5 py-2.5 rounded-lg text-sm font-semibold transition-colors relative min-h-0 min-w-0 ${
         isActive
-          ? 'bg-slate-100 text-slate-900'
-          : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'
+          ? 'bg-slate-900 text-white shadow-sm ring-1 ring-slate-900/20'
+          : 'text-slate-600 hover:bg-white hover:text-slate-900'
       } ${isNavigating ? 'opacity-70 cursor-wait' : ''}`}
       aria-current={isActive ? 'page' : undefined}
     >
-      {icon != null && <span className="text-slate-500 shrink-0">{icon}</span>}
+      {icon != null && (
+        <span className={`shrink-0 ${isActive ? 'text-white' : 'text-slate-500'}`}>{icon}</span>
+      )}
       <span className="truncate">{label}</span>
       {isNavigating && (
         <span className="ml-2 inline-block">

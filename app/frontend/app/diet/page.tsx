@@ -1,8 +1,9 @@
 import dynamic from 'next/dynamic';
+import RouteLoading from '../components/RouteLoading';
 
 // Lazy load DietPortal for code splitting
 const DietPortal = dynamic(() => import('../components/DietPortal'), {
-  loading: () => <div className="flex items-center justify-center h-screen"><div className="text-blue-600">Loading diet portal...</div></div>,
+  loading: () => <RouteLoading label="Loading diet…" />,
 });
 
 export default function DietPage() {
