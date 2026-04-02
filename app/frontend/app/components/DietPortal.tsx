@@ -236,8 +236,8 @@ export default function DietPortal() {
   return (
     <PageShell>
       <div className="hs-page flex flex-1 min-h-0 flex-col">
-      <div className="hs-inner">
-        <header className="mb-8">
+      <div className="hs-inner space-y-8">
+        <header>
           <p className="hs-eyebrow">Diet</p>
           <h1 className="hs-title">Nutrition &amp; meals</h1>
           <p className="hs-lede">

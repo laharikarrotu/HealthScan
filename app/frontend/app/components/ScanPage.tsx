@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
+import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { analyzeAndExecute, extractPrescription, executeVerifiedPlan } from '../lib/api';
 import type { AnalyzeResponse, ActionStep, UIElement, Medication, ExtractPrescriptionResponse, PrescriptionInfo } from '../lib/types';
@@ -10,6 +11,7 @@ import DataVerification from './DataVerification';
 import { useHealthScan } from '../context/HealthScanContext';
 import { safeStorage } from '../lib/storage';
 import MobileScanQrPanel from './MobileScanQrPanel';
+import MedicalDisclaimer from './MedicalDisclaimer';
 import PageShell from './PageShell';
 
 export default function ScanPage() {
@@ -300,23 +302,24 @@ export default function ScanPage() {
       )}
       <PageShell>
         <div className="hs-page flex flex-1 min-h-0 flex-col">
-        <div className="hs-inner">
-          <header className="mb-8">
+        <div className="hs-inner-wide">
+          <div className="flex flex-col gap-8 lg:flex-row lg:items-start lg:gap-10">
+            <div className="min-w-0 flex-1 lg:max-w-2xl">
+          <header className="mb-6">
             <p className="hs-eyebrow">Scan</p>
             <h1 className="hs-title">Prescriptions &amp; documents</h1>
             <p className="hs-lede">
-              Upload an image. Leave the goal empty for fast prescription extraction, or describe what you need for forms and automation.
+              Add an image first. Then optionally describe a goal. Forms and automation use the second step; leave it empty for fast prescription extraction.
             </p>
           </header>
-        
-        {/* Progress Tracker */}
+
         <ProgressTracker />
 
         <form onSubmit={handleSubmit} className="space-y-6">
-          {/* Image Upload Section */}
           <div className="hs-card panel-static p-4 sm:p-5">
-            <h2 className="text-sm font-semibold text-slate-900 mb-3">1. Image</h2>
-            
+            <h2 className="mb-1 text-base font-bold text-slate-900">Step 1 — Add image</h2>
+            <p className="mb-4 text-xs text-slate-600">Upload a file or use this device&apos;s camera.</p>
+
             {imagePreview ? (
               <div className="space-y-4">
                 <img
@@ -327,13 +330,13 @@ export default function ScanPage() {
                 <button
                   type="button"
                   onClick={handleReset}
-                  className="text-sm text-blue-600 hover:text-blue-700 font-medium transition-colors"
+                  className="text-sm font-medium text-sky-700 underline underline-offset-2 transition-colors hover:text-sky-900"
                 >
                   Change image
                 </button>
               </div>
             ) : (
-              <div className="flex flex-col sm:flex-row gap-4">
+              <div className="flex flex-col gap-4 sm:flex-row">
                 <label className="flex-1 cursor-pointer">
                   <input
                     ref={fileInputRef}
@@ -342,12 +345,12 @@ export default function ScanPage() {
                     onChange={handleFileSelect}
                     className="hidden"
                   />
-                  <div className="border border-dashed border-slate-300 rounded-xl p-8 text-center hover:border-slate-400 hover:bg-slate-50/80 transition-colors">
-                    <p className="text-slate-800 font-medium text-sm">Upload from files</p>
-                    <p className="text-xs text-slate-500 mt-1">PNG, JPG, or PDF</p>
+                  <div className="rounded-xl border-2 border-dashed border-slate-300 bg-white p-8 text-center transition-colors hover:border-sky-400 hover:bg-slate-50">
+                    <p className="text-sm font-semibold text-slate-900">Upload from files</p>
+                    <p className="mt-1 text-xs text-slate-500">PNG, JPG, or PDF</p>
                   </div>
                 </label>
-                
+
                 <label className="flex-1 cursor-pointer">
                   <input
                     ref={cameraInputRef}
@@ -357,9 +360,9 @@ export default function ScanPage() {
                     onChange={handleCameraCapture}
                     className="hidden"
                   />
-                  <div className="border border-dashed border-slate-300 rounded-xl p-8 text-center hover:border-slate-400 hover:bg-slate-50/80 transition-colors">
-                    <p className="text-slate-800 font-medium text-sm">Use camera</p>
-                    <p className="text-xs text-slate-500 mt-1">This device</p>
+                  <div className="rounded-xl border-2 border-dashed border-slate-300 bg-white p-8 text-center transition-colors hover:border-sky-400 hover:bg-slate-50">
+                    <p className="text-sm font-semibold text-slate-900">Use camera</p>
+                    <p className="mt-1 text-xs text-slate-500">This device</p>
                   </div>
                 </label>
               </div>
@@ -368,46 +371,49 @@ export default function ScanPage() {
             {!imagePreview && <MobileScanQrPanel />}
           </div>
 
-          {/* Intent Input */}
+          {imagePreview && (
+            <>
           <div className="hs-card panel-static p-4 sm:p-5">
-            <h2 className="text-sm font-semibold text-slate-900 mb-3">2. Goal (optional)</h2>
+            <h2 className="mb-1 text-base font-bold text-slate-900">Step 2 — Goal (optional)</h2>
+            <p className="mb-3 text-xs text-slate-600">
+              Empty = quick prescription read. Or describe forms, tables, or automation.
+            </p>
             <textarea
               value={intent}
               onChange={(e) => setIntent(e.target.value)}
-              placeholder="Empty = extract prescription. Or: “Fill this form”, “Extract table”, etc."
-              className="w-full rounded-xl border border-slate-200 px-3.5 py-3 text-sm text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-400/25 focus:border-slate-400 min-h-[100px] bg-white"
+              placeholder="e.g. “Fill this form”, “Extract the table” — or leave blank"
+              className="min-h-[100px] w-full rounded-xl border border-slate-200 bg-white px-3.5 py-3 text-sm text-slate-900 placeholder:text-slate-400 focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-500/25"
               rows={3}
             />
-            <p className="text-xs text-slate-500 mt-2 leading-relaxed">
-              Leaving this blank runs quick prescription extraction when the image looks like a prescription.
-            </p>
           </div>
 
-          {/* Progress Indicator */}
           {loading && (
             <div className="hs-card panel-static p-4 sm:p-5">
-              <ProgressIndicator 
+              <ProgressIndicator
                 steps={['Analyzing Image', 'Planning Actions', 'Executing', 'Complete']}
                 currentStep={progressStep}
               />
             </div>
           )}
 
-          {/* Submit Button */}
-          <button
-            type="submit"
-            disabled={loading || !image}
-            className="w-full bg-slate-900 hover:bg-slate-800 disabled:opacity-50 disabled:cursor-not-allowed text-white font-medium py-3 px-6 rounded-xl transition-colors flex items-center justify-center gap-2 text-sm"
-          >
-            {loading ? (
-              <>
-                <div className="spinner w-5 h-5 border-2 border-white border-t-transparent"></div>
-                Processing...
-              </>
-            ) : (
-              'Scan & Help'
-            )}
-          </button>
+          <div className="sticky bottom-0 z-10 -mx-4 border-t border-slate-200 bg-slate-50/95 px-4 py-3 backdrop-blur supports-[backdrop-filter]:bg-slate-50/90 sm:static sm:mx-0 sm:rounded-xl sm:border sm:border-slate-200 sm:bg-white sm:py-4 sm:shadow-md">
+            <button
+              type="submit"
+              disabled={loading || !image}
+              className="flex w-full min-h-[52px] items-center justify-center gap-2 rounded-xl bg-emerald-600 px-6 text-base font-semibold text-white shadow-md transition-colors hover:bg-emerald-700 disabled:cursor-not-allowed disabled:opacity-50"
+            >
+              {loading ? (
+                <>
+                  <div className="spinner h-5 w-5 border-2 border-white border-t-transparent" />
+                  Processing…
+                </>
+              ) : (
+                'Run scan'
+              )}
+            </button>
+          </div>
+            </>
+          )}
 
           {(localError || errors.scan) && (
             <div className="rounded-xl border border-red-200 bg-red-50/80 p-4">
@@ -433,8 +439,9 @@ export default function ScanPage() {
         {/* Results */}
         {result && (
           <div className="mt-8 hs-card panel-static p-5 sm:p-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
+            <p className="mb-2 text-xs font-bold uppercase tracking-wider text-slate-500">Step 3 — Results</p>
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-xl font-semibold text-slate-800">Results</h2>
+              <h2 className="text-xl font-semibold text-slate-800">Output</h2>
               <div className={`px-3 py-1 rounded-full text-sm font-medium ${
                 result.status === 'success' ? 'bg-emerald-100 text-emerald-700 border border-emerald-300' :
                 result.status === 'partial' ? 'bg-amber-100 text-amber-700 border border-amber-300' :
@@ -644,6 +651,27 @@ export default function ScanPage() {
             </div>
           </div>
         )}
+            </div>
+
+            <aside className="hidden w-full max-w-[320px] shrink-0 lg:sticky lg:top-28 lg:block" aria-hidden>
+              <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-md">
+                <div className="relative aspect-[3/4] w-full max-h-[min(520px,70vh)]">
+                  <Image
+                    src="/healthscan-hero.png"
+                    alt=""
+                    fill
+                    className="object-cover object-[56%_40%]"
+                    sizes="320px"
+                  />
+                </div>
+                <p className="border-t border-slate-100 px-3 py-2.5 text-xs text-slate-500">
+                  Reference image—forms and data stay in the main column.
+                </p>
+              </div>
+            </aside>
+          </div>
+
+          <MedicalDisclaimer variant="footer" />
         </div>
         </div>
       </PageShell>

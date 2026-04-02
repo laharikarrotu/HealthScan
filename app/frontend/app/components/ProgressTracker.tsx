@@ -14,31 +14,32 @@ export default function ProgressTracker() {
   const currentStepIndex = steps.findIndex((s) => s.id === currentStep);
 
   return (
-    <div className="hs-card panel-static p-4 sm:p-5 mb-6">
-      <h3 className="text-xs font-semibold text-slate-600 uppercase tracking-wide mb-4">Workflow</h3>
-      <div className="flex items-center justify-between gap-1 sm:gap-2">
+    <div className="hs-card panel-static mb-8 p-5 sm:p-6">
+      <h3 className="mb-5 text-xs font-bold uppercase tracking-wider text-slate-500">Workflow</h3>
+      <div className="flex items-center justify-between gap-1 sm:gap-3">
         {steps.map((step, index) => {
           const isActive = currentStep === step.id;
           const isCompleted = step.completed;
-          const isPast = currentStepIndex > index;
+          const isPast = index < currentStepIndex;
 
           return (
-            <div key={step.id} className="flex items-center flex-1 min-w-0">
-              <div className="flex flex-col items-center flex-1 min-w-0">
+            <div key={step.id} className="flex min-w-0 flex-1 items-center">
+              <div className="flex min-w-0 flex-1 flex-col items-center">
                 <div
-                  className={`w-9 h-9 sm:w-10 sm:h-10 rounded-full flex items-center justify-center text-sm font-semibold transition-colors shrink-0 ${
+                  className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-full text-sm font-bold transition-all sm:h-12 sm:w-12 ${
                     isActive
-                      ? 'bg-slate-900 text-white ring-2 ring-slate-900 ring-offset-2'
+                      ? 'bg-sky-600 text-white shadow-md ring-4 ring-sky-200'
                       : isCompleted || isPast
-                        ? 'bg-emerald-700 text-white'
+                        ? 'bg-emerald-600 text-white shadow-sm'
                         : 'bg-slate-200 text-slate-700'
                   }`}
+                  aria-current={isActive ? 'step' : undefined}
                 >
-                  {isCompleted && !isActive ? '✓' : index + 1}
+                  {isCompleted ? '✓' : index + 1}
                 </div>
                 <span
-                  className={`text-[10px] sm:text-xs mt-2 text-center font-medium leading-tight px-0.5 ${
-                    isActive ? 'text-slate-900' : isCompleted ? 'text-emerald-800' : 'text-slate-600'
+                  className={`mt-3 max-w-[5.5rem] text-center text-[10px] font-semibold leading-tight sm:max-w-none sm:text-xs ${
+                    isActive ? 'text-sky-800' : isCompleted ? 'text-emerald-800' : 'text-slate-500'
                   }`}
                 >
                   <span className="hidden sm:inline">{step.label}</span>
@@ -47,9 +48,10 @@ export default function ProgressTracker() {
               </div>
               {index < steps.length - 1 && (
                 <div
-                  className={`flex-1 h-0.5 mx-1 sm:mx-2 rounded-full min-w-[8px] ${
-                    isPast || isCompleted ? 'bg-emerald-600' : 'bg-slate-200'
+                  className={`mx-1 h-1 min-w-[10px] flex-1 rounded-full sm:mx-2 ${
+                    index < currentStepIndex ? 'bg-emerald-500' : 'bg-slate-200'
                   }`}
+                  aria-hidden
                 />
               )}
             </div>

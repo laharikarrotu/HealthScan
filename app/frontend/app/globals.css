@@ -26,33 +26,16 @@
 
 /* Shared layout + form patterns — all main pages use these for consistency */
 @layer utilities {
-  /* Hero photo — all routes use `.hs-page` + PageShell so this matches Home, Scan, Interactions, Diet */
+  /* Solid app canvas — no full-screen photo overlay (readability + trust for healthcare) */
   .hs-page {
     @apply min-h-0 h-full w-full overflow-y-auto text-slate-900 relative isolate;
     background-color: rgb(248 250 252);
   }
-  .hs-page::before {
-    content: "";
-    position: fixed;
-    inset: 0;
-    z-index: 0;
-    pointer-events: none;
-    background-color: rgb(248 250 252);
-    /* Lighter wash so the photo reads clearly; strongest tint at bottom for footer/composer legibility */
-    background-image:
-      linear-gradient(
-        180deg,
-        rgb(248 250 252 / 0.12) 0%,
-        rgb(248 250 252 / 0.22) 38%,
-        rgb(248 250 252 / 0.42) 100%
-      ),
-      url("/healthscan-hero.png");
-    background-size: cover;
-    background-position: 56% 40%;
-    background-repeat: no-repeat;
-  }
   .hs-inner {
     @apply w-full max-w-3xl mx-auto px-4 sm:px-6 py-6 sm:py-8 relative z-[1];
+  }
+  .hs-inner-wide {
+    @apply w-full max-w-6xl mx-auto px-4 sm:px-6 py-6 sm:py-8 relative z-[1];
   }
   .hs-eyebrow {
     @apply text-xs font-semibold text-slate-700 uppercase tracking-wide mb-1;
@@ -474,10 +457,6 @@ select:focus-visible {
 
 /* High Contrast Mode Support */
 @media (prefers-contrast: high) {
-  .hs-page::before {
-    background-image: none;
-    background-color: rgb(248 250 252);
-  }
   .medical-card {
     border-width: 2px;
     border-color: var(--foreground);

@@ -186,8 +186,8 @@ export default function InteractionChecker() {
   return (
     <PageShell>
       <div className="hs-page flex flex-1 min-h-0 flex-col">
-      <div className="hs-inner">
-        <header className="mb-8">
+      <div className="hs-inner space-y-8">
+        <header>
           <p className="hs-eyebrow">Safety check</p>
           <h1 className="hs-title">Drug interactions</h1>
           <p className="hs-lede">
@@ -195,7 +195,7 @@ export default function InteractionChecker() {
           </p>
         </header>
 
-        <form onSubmit={handleSubmit} className="space-y-5" aria-label="Drug interaction checker form">
+        <form onSubmit={handleSubmit} className="space-y-8" aria-label="Drug interaction checker form">
           {/* Multi-Image Upload */}
           <div className="hs-card panel-static p-4 sm:p-5">
             <h2 className="text-sm font-semibold text-slate-900 mb-3">1. Prescription images</h2>

@@ -621,7 +621,7 @@ export default function ChatAgent() {
       )}
 
       {/* Composer — docked to bottom, visually grouped with input + send */}
-      <div className="shrink-0 border-t border-slate-200/90 bg-white/95 px-4 py-3 backdrop-blur-sm sm:px-6 sm:py-4">
+      <div className="shrink-0 border-t border-slate-200 bg-white px-4 py-3 sm:px-6 sm:py-4">
         <div className="mx-auto w-full max-w-3xl">
           <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-slate-600">Message</p>
           <div className="rounded-2xl border-2 border-slate-200 bg-white p-1.5 shadow-md ring-1 ring-slate-200/60 sm:p-2">
