@@ -16,7 +16,7 @@ export default function Nav() {
   ];
   
   return (
-    <nav className="bg-white/95 backdrop-blur-sm border-b border-slate-200/80 sticky top-0 z-50">
+    <nav className="border-b border-slate-200 bg-white sticky top-0 z-50">
       <div className="max-w-3xl mx-auto px-4 sm:px-6 w-full">
         <div className="flex items-center justify-between h-14">
           {/* Logo */}
@@ -31,7 +31,7 @@ export default function Nav() {
           </Link>
 
           {/* Desktop Navigation - Using NavLink with loading states */}
-          <div className="hidden md:flex items-center gap-1 p-1 rounded-xl bg-slate-100/90 border border-slate-200/80">
+          <div className="hidden md:flex items-center gap-1 rounded-xl border border-slate-200 bg-slate-100 p-1">
             {navLinks.map((link) => (
               <NavLink
                 key={link.href}

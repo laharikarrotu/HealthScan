@@ -7,7 +7,7 @@ type PageShellProps = {
 
 /**
  * Full-height column wrapper so each route matches the home layout flex chain.
- * Pair with an inner `.hs-page` — the global hero backdrop is on `.hs-page::before`.
+ * Use with an inner `.hs-page` (solid slate-50 canvas — no full-screen background image).
  */
 export default function PageShell({ children, className = '', ...rest }: PageShellProps) {
   return (

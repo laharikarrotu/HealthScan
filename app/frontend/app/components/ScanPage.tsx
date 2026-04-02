@@ -396,7 +396,7 @@ export default function ScanPage() {
             </div>
           )}
 
-          <div className="sticky bottom-0 z-10 -mx-4 border-t border-slate-200 bg-slate-50/95 px-4 py-3 backdrop-blur supports-[backdrop-filter]:bg-slate-50/90 sm:static sm:mx-0 sm:rounded-xl sm:border sm:border-slate-200 sm:bg-white sm:py-4 sm:shadow-md">
+          <div className="sticky bottom-0 z-10 -mx-4 border-t border-slate-200 bg-white px-4 py-3 sm:static sm:mx-0 sm:rounded-xl sm:border sm:border-slate-200 sm:py-4 sm:shadow-md">
             <button
               type="submit"
               disabled={loading || !image}
