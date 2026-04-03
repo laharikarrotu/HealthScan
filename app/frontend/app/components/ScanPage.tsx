@@ -1,7 +1,6 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
-import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { analyzeAndExecute, extractPrescription, executeVerifiedPlan } from '../lib/api';
 import type { AnalyzeResponse, ActionStep, UIElement, Medication, ExtractPrescriptionResponse, PrescriptionInfo } from '../lib/types';
@@ -652,23 +651,6 @@ export default function ScanPage() {
           </div>
         )}
             </div>
-
-            <aside className="hidden w-full max-w-[320px] shrink-0 lg:sticky lg:top-28 lg:block" aria-hidden>
-              <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-md">
-                <div className="relative aspect-[3/4] w-full max-h-[min(520px,70vh)]">
-                  <Image
-                    src="/healthscan-hero.png"
-                    alt=""
-                    fill
-                    className="object-cover object-[56%_40%]"
-                    sizes="320px"
-                  />
-                </div>
-                <p className="border-t border-slate-100 px-3 py-2.5 text-xs text-slate-500">
-                  Reference image—forms and data stay in the main column.
-                </p>
-              </div>
-            </aside>
           </div>
 
           <MedicalDisclaimer variant="footer" />
