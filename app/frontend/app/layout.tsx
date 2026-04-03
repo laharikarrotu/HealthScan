@@ -5,6 +5,7 @@ import Nav from "./components/Nav";
 import NavigationLoading from "./components/NavigationLoading";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { HealthScanProvider } from "./context/HealthScanContext";
+import HealthAmbientParticles from "./components/HealthAmbientParticles";
 
 export const metadata: Metadata = {
   title: "HealthScan - AI Healthcare Assistant",
@@ -40,6 +41,7 @@ export default function RootLayout({
             <main id="main-content" tabIndex={-1} className="flex-1 flex flex-col min-h-0 w-full overflow-y-auto">
               {children}
             </main>
+            <HealthAmbientParticles />
           </HealthScanProvider>
         </ErrorBoundary>
         <SpeedInsights />

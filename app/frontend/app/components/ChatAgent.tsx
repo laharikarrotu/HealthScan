@@ -6,7 +6,6 @@ import { useHealthScan } from '../context/HealthScanContext';
 import { API_BASE_URL } from '../lib/api';
 import type { PrescriptionInfo } from '../lib/types';
 import PageShell from './PageShell';
-import HealthAmbientParticles from './HealthAmbientParticles';
 import MedicalDisclaimer from './MedicalDisclaimer';
 import PrescriptionCard from './PrescriptionCard';
 import StreamingProgress from './StreamingProgress';
@@ -431,7 +430,6 @@ export default function ChatAgent() {
   return (
     <PageShell role="main" aria-label="HealthScan Chat Assistant">
       <div className="hs-page flex flex-1 min-h-0 flex-col overflow-hidden">
-        <HealthAmbientParticles />
         <div className="hs-inner mx-auto flex w-full max-w-3xl flex-1 flex-col min-h-0 pb-4">
           <header className="mb-4 shrink-0 border-b border-slate-200/90 pb-4 text-center sm:mb-5">
             <p className="hs-eyebrow">Home</p>

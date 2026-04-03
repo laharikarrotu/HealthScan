@@ -1,12 +1,22 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
 
-/** Fixed canvas behind page content (z-[1]); pairs with `.hs-page` mesh at z-0. */
+/**
+ * Full-viewport ambient layer portaled to document.body at z-40 (below nav/modals at 50).
+ * Must sit above opaque #main-content so motion is actually visible on cards and canvas.
+ */
 export default function HealthAmbientParticles() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (!mounted) return;
     const el = canvasRef.current;
     if (!el) return;
     const rawCtx = el.getContext('2d');
@@ -129,8 +139,8 @@ export default function HealthAmbientParticles() {
           graphics.lineTo(x, yy);
         }
       }
-      graphics.strokeStyle = `rgba(6, 182, 212, ${alpha})`;
-      graphics.lineWidth = 1;
+      graphics.strokeStyle = `rgba(6, 182, 212, ${alpha * 1.35})`;
+      graphics.lineWidth = 1.15;
       graphics.stroke();
     }
 
@@ -139,10 +149,10 @@ export default function HealthAmbientParticles() {
       for (const d of dots) {
         const c =
           d.hue === 0
-            ? 'rgba(6, 182, 212, 0.14)'
+            ? 'rgba(6, 182, 212, 0.26)'
             : d.hue === 1
-              ? 'rgba(16, 185, 129, 0.12)'
-              : 'rgba(100, 116, 139, 0.1)';
+              ? 'rgba(16, 185, 129, 0.22)'
+              : 'rgba(100, 116, 139, 0.2)';
         graphics.fillStyle = c;
         graphics.beginPath();
         graphics.arc(d.x, d.y, d.r, 0, Math.PI * 2);
@@ -166,25 +176,25 @@ export default function HealthAmbientParticles() {
         if (d.y > h + 8) d.y = -8;
         const c =
           d.hue === 0
-            ? 'rgba(6, 182, 212, 0.16)'
+            ? 'rgba(6, 182, 212, 0.32)'
             : d.hue === 1
-              ? 'rgba(16, 185, 129, 0.13)'
-              : 'rgba(100, 116, 139, 0.11)';
+              ? 'rgba(16, 185, 129, 0.26)'
+              : 'rgba(100, 116, 139, 0.22)';
         graphics.fillStyle = c;
         graphics.beginPath();
         graphics.arc(d.x, d.y, d.r, 0, Math.PI * 2);
         graphics.fill();
       }
 
-      const linkAlpha = (phase: number) => 0.04 + Math.sin(t * 1.2 + phase) * 0.035;
+      const linkAlpha = (phase: number) => 0.08 + Math.sin(t * 1.2 + phase) * 0.06;
       for (const L of links) {
         graphics.beginPath();
         graphics.moveTo(L.ax, L.ay);
         graphics.lineTo(L.bx, L.by);
         graphics.strokeStyle = `rgba(14, 165, 233, ${linkAlpha(L.phase)})`;
-        graphics.lineWidth = 0.85;
+        graphics.lineWidth = 1.1;
         graphics.stroke();
-        graphics.fillStyle = `rgba(14, 165, 233, ${0.1 + linkAlpha(L.phase) * 0.5})`;
+        graphics.fillStyle = `rgba(14, 165, 233, ${0.18 + linkAlpha(L.phase) * 0.55})`;
         for (const p of [
           [L.ax, L.ay],
           [L.bx, L.by],
@@ -198,11 +208,11 @@ export default function HealthAmbientParticles() {
       for (const p of pulses) {
         p.t += p.speed;
         const radius = ((p.t * 0.5) % 1) * 90 + 8;
-        const a = Math.max(0, 0.14 * (1 - radius / 98));
+        const a = Math.max(0, 0.22 * (1 - radius / 98));
         graphics.beginPath();
         graphics.arc(p.x, p.y, radius, 0, Math.PI * 2);
         graphics.strokeStyle = `rgba(16, 185, 129, ${a})`;
-        graphics.lineWidth = 1.2;
+        graphics.lineWidth = 1.35;
         graphics.stroke();
       }
 
@@ -213,8 +223,8 @@ export default function HealthAmbientParticles() {
         graphics.save();
         graphics.translate(c.x, c.y);
         graphics.rotate(c.rot);
-        graphics.strokeStyle = 'rgba(100, 116, 139, 0.11)';
-        graphics.lineWidth = 1;
+        graphics.strokeStyle = 'rgba(100, 116, 139, 0.2)';
+        graphics.lineWidth = 1.1;
         const s = c.size;
         graphics.beginPath();
         graphics.moveTo(-s, 0);
@@ -226,9 +236,9 @@ export default function HealthAmbientParticles() {
       }
 
       const scroll = t * scrollSpeed;
-      drawEcgStrip(h * 0.22, scroll, ecgOffsets[0] ?? 0, 0.11);
-      drawEcgStrip(h * 0.78, scroll * 0.85, ecgOffsets[1] ?? 0, 0.09);
-      drawEcgStrip(h * 0.52, scroll * 1.1, ecgOffsets[2] ?? 0, 0.07);
+      drawEcgStrip(h * 0.22, scroll, ecgOffsets[0] ?? 0, 0.14);
+      drawEcgStrip(h * 0.78, scroll * 0.85, ecgOffsets[1] ?? 0, 0.12);
+      drawEcgStrip(h * 0.52, scroll * 1.1, ecgOffsets[2] ?? 0, 0.1);
 
       raf = requestAnimationFrame(frame);
     }
@@ -253,13 +263,14 @@ export default function HealthAmbientParticles() {
       window.removeEventListener('resize', resize);
       reducedMotion.removeEventListener('change', onMotionChange);
     };
-  }, []);
+  }, [mounted]);
 
-  return (
-    <canvas
-      ref={canvasRef}
-      className="hs-ambient-canvas pointer-events-none fixed inset-0 z-[1] opacity-[0.38]"
-      aria-hidden
-    />
+  if (!mounted || typeof document === 'undefined') {
+    return null;
+  }
+
+  return createPortal(
+    <canvas ref={canvasRef} className="hs-ambient-canvas" aria-hidden />,
+    document.body,
   );
 }

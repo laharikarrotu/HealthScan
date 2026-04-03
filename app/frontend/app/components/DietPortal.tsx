@@ -8,7 +8,6 @@ import { API_BASE_URL } from '../lib/api';
 import { safeStorage } from '../lib/storage';
 import MedicalDisclaimer from './MedicalDisclaimer';
 import PageShell from './PageShell';
-import HealthAmbientParticles from './HealthAmbientParticles';
 
 export default function DietPortal() {
   const {
@@ -237,7 +236,6 @@ export default function DietPortal() {
   return (
     <PageShell>
       <div className="hs-page flex flex-1 min-h-0 flex-col">
-      <HealthAmbientParticles />
       <div className="hs-inner space-y-8">
         <header>
           <p className="hs-eyebrow">Diet</p>
