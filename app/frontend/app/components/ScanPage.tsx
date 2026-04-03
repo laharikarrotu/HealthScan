@@ -12,6 +12,7 @@ import { safeStorage } from '../lib/storage';
 import MobileScanQrPanel from './MobileScanQrPanel';
 import MedicalDisclaimer from './MedicalDisclaimer';
 import PageShell from './PageShell';
+import HealthAmbientParticles from './HealthAmbientParticles';
 
 export default function ScanPage() {
   const router = useRouter();
@@ -301,6 +302,7 @@ export default function ScanPage() {
       )}
       <PageShell>
         <div className="hs-page flex flex-1 min-h-0 flex-col">
+        <HealthAmbientParticles />
         <div className="hs-inner-wide">
           <div className="flex flex-col gap-8 lg:flex-row lg:items-start lg:gap-10">
             <div className="min-w-0 flex-1 lg:max-w-2xl">

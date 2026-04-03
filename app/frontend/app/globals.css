@@ -130,48 +130,101 @@ body {
   background-image: none;
 }
 
-/* Soft animated mesh (no photos) — slightly stronger so it’s visible on large screens */
+/* Live background (no photos): two slow layers at very low opacity — motion + depth */
 .hs-page::before {
   content: "";
   position: fixed;
-  inset: -10%;
+  inset: -14%;
   z-index: 0;
   pointer-events: none;
-  opacity: 0.8;
+  opacity: 0.18;
   background:
-    radial-gradient(circle at 20% 25%, rgb(56 189 248 / 0.22), transparent 52%),
-    radial-gradient(circle at 80% 75%, rgb(52 211 153 / 0.2), transparent 55%),
-    radial-gradient(circle at 50% 5%, rgb(148 163 184 / 0.16), transparent 55%);
-  animation: hs-mesh 26s ease-in-out infinite;
+    radial-gradient(ellipse 72% 58% at 16% 26%, rgb(56 189 248 / 0.55), transparent 58%),
+    radial-gradient(ellipse 68% 52% at 84% 74%, rgb(45 212 191 / 0.45), transparent 58%),
+    radial-gradient(ellipse 55% 45% at 50% 8%, rgb(148 163 184 / 0.35), transparent 62%);
+  animation: hs-mesh-live 32s ease-in-out infinite;
   will-change: transform;
 }
 
-@keyframes hs-mesh {
+.hs-page::after {
+  content: "";
+  position: fixed;
+  inset: -22%;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.1;
+  background:
+    radial-gradient(circle at 62% 38%, rgb(14 165 233 / 0.4), transparent 46%),
+    radial-gradient(circle at 28% 68%, rgb(52 211 153 / 0.32), transparent 44%),
+    repeating-linear-gradient(
+      105deg,
+      transparent 0,
+      transparent 56px,
+      rgb(148 163 184 / 0.045) 56px,
+      rgb(148 163 184 / 0.045) 57px
+    );
+  animation: hs-mesh-live-slow 48s ease-in-out infinite reverse;
+  will-change: transform;
+}
+
+@keyframes hs-mesh-live {
   0%,
   100% {
     transform: translate(0, 0) scale(1);
   }
-  33% {
-    transform: translate(3%, -3%) scale(1.05);
+  50% {
+    transform: translate(2.8%, -2.2%) scale(1.045);
   }
-  66% {
-    transform: translate(-3%, 2.5%) scale(1.07);
+}
+
+@keyframes hs-mesh-live-slow {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1) rotate(0deg);
+  }
+  50% {
+    transform: translate(-3.2%, 2.8%) scale(1.06) rotate(0.4deg);
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .hs-page::before {
+  .hs-page::before,
+  .hs-page::after {
     animation: none;
-    opacity: 0.4;
     transform: none;
+  }
+
+  .hs-page::before {
+    opacity: 0.14;
+  }
+
+  .hs-page::after {
+    opacity: 0.08;
+  }
+
+  .hs-ambient-canvas {
+    opacity: 0.22 !important;
   }
 }
 
 @media (prefers-contrast: more) {
-  .hs-page::before {
+  .hs-page::before,
+  .hs-page::after {
     animation: none;
-    opacity: 0.16;
     transform: none;
+  }
+
+  .hs-page::before {
+    opacity: 0.08;
+  }
+
+  .hs-page::after {
+    opacity: 0;
+  }
+
+  .hs-ambient-canvas {
+    opacity: 0 !important;
+    visibility: hidden;
   }
 }
 

@@ -9,6 +9,7 @@ import { API_BASE_URL, fetchAllergyProfile, saveAllergyProfile } from '../lib/ap
 import { safeStorage } from '../lib/storage';
 import MedicalDisclaimer from './MedicalDisclaimer';
 import PageShell from './PageShell';
+import HealthAmbientParticles from './HealthAmbientParticles';
 
 export default function InteractionChecker() {
   const router = useRouter();
@@ -186,6 +187,7 @@ export default function InteractionChecker() {
   return (
     <PageShell>
       <div className="hs-page flex flex-1 min-h-0 flex-col">
+      <HealthAmbientParticles />
       <div className="hs-inner space-y-8">
         <header>
           <p className="hs-eyebrow">Safety check</p>
