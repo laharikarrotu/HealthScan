@@ -130,19 +130,19 @@ body {
   background-image: none;
 }
 
-/* Soft animated mesh (no photos) — subtle motion; disabled when user prefers reduced motion */
+/* Soft animated mesh (no photos) — slightly stronger so it’s visible on large screens */
 .hs-page::before {
   content: "";
   position: fixed;
-  inset: -15%;
+  inset: -10%;
   z-index: 0;
   pointer-events: none;
-  opacity: 0.5;
+  opacity: 0.8;
   background:
-    radial-gradient(circle at 22% 32%, rgb(56 189 248 / 0.14), transparent 42%),
-    radial-gradient(circle at 78% 68%, rgb(52 211 153 / 0.12), transparent 42%),
-    radial-gradient(circle at 50% 8%, rgb(148 163 184 / 0.1), transparent 48%);
-  animation: hs-mesh 22s ease-in-out infinite;
+    radial-gradient(circle at 20% 25%, rgb(56 189 248 / 0.22), transparent 52%),
+    radial-gradient(circle at 80% 75%, rgb(52 211 153 / 0.2), transparent 55%),
+    radial-gradient(circle at 50% 5%, rgb(148 163 184 / 0.16), transparent 55%);
+  animation: hs-mesh 26s ease-in-out infinite;
   will-change: transform;
 }
 
@@ -152,17 +152,17 @@ body {
     transform: translate(0, 0) scale(1);
   }
   33% {
-    transform: translate(2%, -2.5%) scale(1.04);
+    transform: translate(3%, -3%) scale(1.05);
   }
   66% {
-    transform: translate(-2.5%, 2%) scale(1.06);
+    transform: translate(-3%, 2.5%) scale(1.07);
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .hs-page::before {
     animation: none;
-    opacity: 0.32;
+    opacity: 0.4;
     transform: none;
   }
 }
@@ -170,7 +170,7 @@ body {
 @media (prefers-contrast: more) {
   .hs-page::before {
     animation: none;
-    opacity: 0.12;
+    opacity: 0.16;
     transform: none;
   }
 }
