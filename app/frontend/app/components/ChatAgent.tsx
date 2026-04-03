@@ -430,20 +430,20 @@ export default function ChatAgent() {
   return (
     <PageShell role="main" aria-label="HealthScan Chat Assistant">
       <div className="hs-page flex flex-1 min-h-0 flex-col overflow-hidden">
-        <div className="hs-inner flex flex-1 flex-col min-h-0 pb-4">
-          <header className="mb-4 sm:mb-5 pb-4 border-b border-slate-200/90 shrink-0">
+        <div className="hs-inner mx-auto flex w-full max-w-3xl flex-1 flex-col min-h-0 pb-4">
+          <header className="mb-4 shrink-0 border-b border-slate-200/90 pb-4 text-center sm:mb-5">
             <p className="hs-eyebrow">Home</p>
             <h1 className="hs-title">Assistant</h1>
-            <p className="hs-lede">
+            <p className="hs-lede mx-auto">
               Upload a prescription photo first, or ask a question below. Use more tools for guided flows.
             </p>
           </header>
 
-          <div className="flex flex-1 flex-col min-h-0 -mx-4 sm:-mx-6 px-4 sm:px-6">
-            <div className="flex flex-1 min-h-0 overflow-y-auto overscroll-contain">
+          <div className="flex min-h-0 flex-1 flex-col">
+            <div className="flex min-h-0 flex-1 overflow-y-auto overscroll-contain">
               <div
-                className={`flex w-full flex-col flex-1 min-h-full gap-4 ${
-                  showEmptyState ? 'justify-end' : 'justify-start'
+                className={`flex min-h-full w-full flex-1 flex-col gap-4 ${
+                  showEmptyState ? 'justify-center' : 'justify-start'
                 }`}
               >
                 {showEmptyState && (
