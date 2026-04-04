@@ -139,7 +139,7 @@ export default function HealthAmbientParticles() {
           graphics.lineTo(x, yy);
         }
       }
-      graphics.strokeStyle = `rgba(6, 182, 212, ${alpha * 1.35})`;
+      graphics.strokeStyle = `rgba(6, 182, 212, ${alpha * 1.45})`;
       graphics.lineWidth = 1.15;
       graphics.stroke();
     }
@@ -149,10 +149,10 @@ export default function HealthAmbientParticles() {
       for (const d of dots) {
         const c =
           d.hue === 0
-            ? 'rgba(6, 182, 212, 0.26)'
+            ? 'rgba(6, 182, 212, 0.31)'
             : d.hue === 1
-              ? 'rgba(16, 185, 129, 0.22)'
-              : 'rgba(100, 116, 139, 0.2)';
+              ? 'rgba(16, 185, 129, 0.27)'
+              : 'rgba(100, 116, 139, 0.25)';
         graphics.fillStyle = c;
         graphics.beginPath();
         graphics.arc(d.x, d.y, d.r, 0, Math.PI * 2);
@@ -176,17 +176,17 @@ export default function HealthAmbientParticles() {
         if (d.y > h + 8) d.y = -8;
         const c =
           d.hue === 0
-            ? 'rgba(6, 182, 212, 0.32)'
+            ? 'rgba(6, 182, 212, 0.38)'
             : d.hue === 1
-              ? 'rgba(16, 185, 129, 0.26)'
-              : 'rgba(100, 116, 139, 0.22)';
+              ? 'rgba(16, 185, 129, 0.31)'
+              : 'rgba(100, 116, 139, 0.27)';
         graphics.fillStyle = c;
         graphics.beginPath();
         graphics.arc(d.x, d.y, d.r, 0, Math.PI * 2);
         graphics.fill();
       }
 
-      const linkAlpha = (phase: number) => 0.08 + Math.sin(t * 1.2 + phase) * 0.06;
+      const linkAlpha = (phase: number) => 0.1 + Math.sin(t * 1.2 + phase) * 0.07;
       for (const L of links) {
         graphics.beginPath();
         graphics.moveTo(L.ax, L.ay);
@@ -194,7 +194,7 @@ export default function HealthAmbientParticles() {
         graphics.strokeStyle = `rgba(14, 165, 233, ${linkAlpha(L.phase)})`;
         graphics.lineWidth = 1.1;
         graphics.stroke();
-        graphics.fillStyle = `rgba(14, 165, 233, ${0.18 + linkAlpha(L.phase) * 0.55})`;
+        graphics.fillStyle = `rgba(14, 165, 233, ${0.22 + linkAlpha(L.phase) * 0.55})`;
         for (const p of [
           [L.ax, L.ay],
           [L.bx, L.by],
@@ -208,7 +208,7 @@ export default function HealthAmbientParticles() {
       for (const p of pulses) {
         p.t += p.speed;
         const radius = ((p.t * 0.5) % 1) * 90 + 8;
-        const a = Math.max(0, 0.22 * (1 - radius / 98));
+        const a = Math.max(0, 0.27 * (1 - radius / 98));
         graphics.beginPath();
         graphics.arc(p.x, p.y, radius, 0, Math.PI * 2);
         graphics.strokeStyle = `rgba(16, 185, 129, ${a})`;
@@ -223,7 +223,7 @@ export default function HealthAmbientParticles() {
         graphics.save();
         graphics.translate(c.x, c.y);
         graphics.rotate(c.rot);
-        graphics.strokeStyle = 'rgba(100, 116, 139, 0.2)';
+        graphics.strokeStyle = 'rgba(100, 116, 139, 0.26)';
         graphics.lineWidth = 1.1;
         const s = c.size;
         graphics.beginPath();
@@ -236,9 +236,9 @@ export default function HealthAmbientParticles() {
       }
 
       const scroll = t * scrollSpeed;
-      drawEcgStrip(h * 0.22, scroll, ecgOffsets[0] ?? 0, 0.14);
-      drawEcgStrip(h * 0.78, scroll * 0.85, ecgOffsets[1] ?? 0, 0.12);
-      drawEcgStrip(h * 0.52, scroll * 1.1, ecgOffsets[2] ?? 0, 0.1);
+      drawEcgStrip(h * 0.22, scroll, ecgOffsets[0] ?? 0, 0.17);
+      drawEcgStrip(h * 0.78, scroll * 0.85, ecgOffsets[1] ?? 0, 0.14);
+      drawEcgStrip(h * 0.52, scroll * 1.1, ecgOffsets[2] ?? 0, 0.12);
 
       raf = requestAnimationFrame(frame);
     }
